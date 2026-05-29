@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Расписание ККОТИП</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<!-- SheetJS for Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --primary: #C0394B;
+  --primary-light: #F9E6E8;
+  --primary-mid: #E8909A;
+  --primary-dark: #8B1A28;
+  --white: #FFFFFF;
+  --bg: #FDF5F6;
+  --border: #F0C8CD;
+  --text: #1A1A1A;
+  --text-muted: #6B6B6B;
+  --text-light: #9B9B9B;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 90px;
+}
+
+/* HEADER */
+header {
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: 0 2px 12px rgba(192,57,75,0.08);
+}
+
+.header-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 36px; height: 36px;
+  background: var(--primary);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+
+.logo-title { font-weight: 700; font-size: 16px; color: var(--text); line-height: 1.2; }
+.logo-sub { font-size: 11px; color: var(--text-muted); line-height: 1.2; }
+
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  margin-left: 4px;
+  transition: background 0.3s;
+}
+.status-dot.online { background: #22c55e; }
+
+.header-btns { display: flex; gap: 8px; }
+
+.btn-header {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-header:active { opacity: 0.75; }
+
+/* CONTENT */
+.content { max-width: 800px; margin: 0 auto; padding: 16px; }
+
+/* EMPTY STATE */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; min-height: 60vh; text-align: center;
+}
+
+.empty-icon {
+  width: 80px; height: 80px;
+  background: var(--primary-light);
+  border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; margin-bottom: 20px;
+}
+
+.empty-state h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.empty-state p { color: var(--text-muted); }
+
+/* SECTION LABEL */
+.section-label {
+  font-size: 12px; font-weight: 600; color: var(--text-muted);
+  margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* CHIP BUTTONS */
+.chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+.chip {
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text);
+  font-weight: 600; font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chip:active { opacity: 0.75; }
+.chip.active-cat { background: var(--primary); border-color: var(--primary); color: var(--white); }
+.chip.active-grp { background: var(--primary-dark); border-color: var(--primary-dark); color: var(--white); }
+
+/* DAYS GRID */
+.days-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 12px;
+  border: 1.5px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.day-btn {
+  padding: 10px 4px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-light);
+  font-weight: 500; font-size: 13px;
+  cursor: default;
+  text-align: center;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.day-btn.has-classes { cursor: pointer; background: var(--primary-light); color: var(--primary); }
+.day-btn.has-classes:active { opacity: 0.75; }
+.day-btn.selected { background: var(--primary); color: var(--white); font-weight: 700; }
+
+.day-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--primary);
+  margin: 3px auto 0;
+}
+
+/* SCHEDULE HEADER */
+.schedule-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.schedule-header h2 { font-size: 20px; font-weight: 700; }
+.schedule-header p { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+
+.count-badge {
+  background: var(--primary-light);
+  border-radius: 10px;
+  padding: 8px 14px;
+  text-align: center;
+}
+.count-badge .num { font-size: 20px; font-weight: 700; color: var(--primary); line-height: 1; }
+.count-badge .lbl { font-size: 11px; color: var(--primary-mid); margin-top: 2px; }
+
+/* CLASS CARDS */
+.class-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.class-card.highlighted {
+  background: #FFF0F2;
+  border-color: var(--primary-mid);
+}
+
+.lesson-num {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 15px;
+  flex-shrink: 0;
+}
+
+.class-card.highlighted .lesson-num {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.class-info { flex: 1; min-width: 0; }
+.class-subject {
+  font-weight: 600; font-size: 14px; color: var(--text);
+  margin-bottom: 3px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+}
+.class-teacher {
+  font-size: 12px; color: var(--text-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.room-badge {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px; font-weight: 700;
+  flex-shrink: 0;
+  text-align: center;
+  min-width: 44px;
+}
+
+/* NO CLASSES */
+.no-classes {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 48px 24px;
+  text-align: center;
+}
+.no-classes .emoji { font-size: 48px; margin-bottom: 12px; }
+.no-classes p { color: var(--text-muted); font-weight: 500; }
+
+/* FOOTER */
+footer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--white);
+  border-top: 2px solid var(--border);
+  padding: 12px 16px;
+  box-shadow: 0 -4px 16px rgba(192,57,75,0.08);
+  z-index: 40;
+}
+
+.footer-inner {
+  max-width: 800px; margin: 0 auto;
+  display: flex; gap: 10px;
+}
+
+.btn-download {
+  flex: 1; padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: var(--primary);
+  color: var(--white);
+  font-weight: 700; font-size: 15px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-download:disabled { background: #E5E5E5; color: #999; cursor: not-allowed; }
+.btn-download:not(:disabled):active { opacity: 0.8; }
+
+.admin-badge {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600; font-size: 13px;
+  display: flex; align-items: center;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center;
+  z-index: 50; padding: 16px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 28px;
+  width: 100%; max-width: 400px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+}
+
+.modal-title {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+}
+.modal-title-icon {
+  width: 40px; height: 40px;
+  background: var(--primary-light);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.modal-title h2 { font-size: 18px; font-weight: 700; }
+
+.modal input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 16px;
+  color: var(--text);
+  font-family: inherit;
+}
+.modal input:focus { border-color: var(--primary); }
+
+.modal-btns { display: flex; gap: 10px; }
+.btn-cancel {
+  flex: 1; padding: 12px; border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--white); color: var(--text-muted);
+  font-weight: 600; font-size: 14px; cursor: pointer;
+  font-family: inherit;
+}
+.btn-confirm {
+  flex: 1; padding: 12px; border-radius: 12px;
+  border: none;
+  background: var(--primary); color: var(--white);
+  font-weight: 600; font-size: 14px; cursor: pointer;
+  font-family: inherit;
+}
+
+/* LOADING OVERLAY */
+.loading-overlay {
+  position: fixed; inset: 0;
+  background: rgba(192,57,75,0.15);
+  display: none; align-items: center; justify-content: center;
+  z-index: 50; backdrop-filter: blur(4px);
+}
+.loading-overlay.open { display: flex; }
+.loading-box {
+  background: var(--white); border-radius: 20px;
+  padding: 32px 40px; text-align: center;
+  box-shadow: 0 8px 32px rgba(192,57,75,0.2);
+}
+.spinner {
+  width: 48px; height: 48px;
+  border: 3px solid var(--primary-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+.loading-box p { color: var(--primary); font-weight: 600; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+button { transition: opacity 0.15s; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none">
+
+<!-- Loading -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <p>Загружаем расписание...</p>
+  </div>
+</div>
+
+<!-- Password Modal -->
+<div class="modal-overlay" id="passwordModal">
+  <div class="modal">
+    <div class="modal-title">
+      <div class="modal-title-icon">🔐</div>
+      <h2>Вход для администратора</h2>
+    </div>
+    <input type="password" id="passwordInput" placeholder="Введите пароль">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn-confirm" onclick="submitPassword()">Войти</button>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <div class="header-logo">
+      <div class="logo-icon">📅</div>
+      <div>
+        <div class="logo-title">Расписание</div>
+        <div class="logo-sub">ККОТИП</div>
+      </div>
+      <div class="status-dot" id="statusDot" title="Нет связи"></div>
+    </div>
+    <div class="header-btns">
+      <button class="btn-header" onclick="window.open('https://kkotip-distant.ru/login/index.php','_blank')">🎓 Moodle</button>
+      <button class="btn-header" onclick="window.open('https://disk.yandex.ru/d/5X9Q16V9HN7sGg','_blank')">💾 Диск</button>
+    </div>
+  </div>
+</header>
+
+<!-- Content -->
+<div class="content" id="appContent">
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon">📅</div>
+    <h2>Расписание колледжа</h2>
+    <p id="emptyMsg">Подключение к серверу...</p>
+  </div>
+
+  <div id="mainView" style="display:none">
+    <!-- Categories -->
+    <div>
+      <div class="section-label">Отделение</div>
+      <div class="chip-group" id="categoryChips"></div>
+    </div>
+
+    <!-- Groups -->
+    <div>
+      <div class="section-label">Группа</div>
+      <div class="chip-group" id="groupChips"></div>
+    </div>
+
+    <!-- Days -->
+    <div class="days-card">
+      <div class="days-grid" id="daysGrid"></div>
+    </div>
+
+    <!-- Schedule header -->
+    <div class="schedule-header">
+      <div>
+        <h2 id="schedGroupLabel">—</h2>
+        <p id="schedDayLabel">—</p>
+      </div>
+      <div class="count-badge">
+        <div class="num" id="countNum">0</div>
+        <div class="lbl">пар</div>
+      </div>
+    </div>
+
+    <!-- Class list -->
+    <div id="classList"></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <button class="btn-download" id="downloadBtn" onclick="handleExport()" disabled>
+      💾 Скачать расписание
+    </button>
+    <div class="admin-badge" id="adminBadge" style="display:none">admin</div>
+  </div>
+</footer>
+
+<script>
+// ── Firebase ────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyDQLn1VTn_ZzIy73UhuQ46qc2CEApuEMI8",
+  authDomain: "alex-37be2.firebaseapp.com",
+  databaseURL: "https://alex-37be2-default-rtdb.firebaseio.com",
+  projectId: "alex-37be2",
+  storageBucket: "alex-37be2.firebasestorage.app",
+  messagingSenderId: "344988588249",
+  appId: "1:344988588249:web:c9b80008c76e49603b86c8"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const ADMIN_HASH = 'be106bd142bb15113747f6578c158a6bc6c449b20f3f17b4b355c5ce3f64856b';
+
+// ── State ───────────────────────────────────────────────────────────────
+let scheduleData = {};
+let categories = {};
+let selectedCategory = '';
+let selectedGroup = '';
+let selectedDay = 'Понедельник';
+let isAdmin = false;
+const DAYS = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+const DAYS_SHORT = ['Пн','Вт','Ср','Чт','Пт','Сб'];
+
+// ── Firebase listener ───────────────────────────────────────────────────
+db.ref('schedule').on('value', snap => {
+  document.getElementById('statusDot').classList.add('online');
+  document.getElementById('statusDot').title = 'Онлайн';
+  const data = snap.val();
+  if (data && data.schedule && data.cats && Object.keys(data.schedule).length > 0) {
+    scheduleData = data.schedule;
+    categories = data.cats;
+    const firstCat = Object.keys(data.cats)[0];
+    if (!selectedCategory) selectedCategory = firstCat;
+    if (!selectedGroup && data.cats[firstCat]?.length) selectedGroup = data.cats[firstCat][0];
+    render();
+  } else {
+    document.getElementById('emptyMsg').textContent = 'Данных пока нет';
+  }
+}, () => {
+  document.getElementById('statusDot').classList.remove('online');
+  document.getElementById('statusDot').title = 'Нет связи';
+  document.getElementById('emptyMsg').textContent = 'Нет подключения к серверу';
+});
+
+// ── Keyboard shortcut (Ctrl+Shift+U) ───────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'U') {
+    if (isAdmin) document.getElementById('fileInput').click();
+    else document.getElementById('passwordModal').classList.add('open');
+  }
+});
+
+// ── Password ────────────────────────────────────────────────────────────
+function closeModal() {
+  document.getElementById('passwordModal').classList.remove('open');
+  document.getElementById('passwordInput').value = '';
+}
+
+async function submitPassword() {
+  const pw = document.getElementById('passwordInput').value;
+  const enc = new TextEncoder().encode(pw);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  if (hex === ADMIN_HASH) {
+    isAdmin = true;
+    closeModal();
+    document.getElementById('adminBadge').style.display = 'flex';
+    document.getElementById('fileInput').click();
+  } else {
+    alert('Неверный пароль!');
+    document.getElementById('passwordInput').value = '';
+  }
+}
+
+document.getElementById('passwordInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitPassword();
+});
+
+// ── File handling ───────────────────────────────────────────────────────
+document.getElementById('fileInput').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  await processFile(file);
+  e.target.value = '';
+});
+
+async function processFile(file) {
+  document.getElementById('loadingOverlay').classList.add('open');
+  try {
+    let result;
+    const name = file.name.toLowerCase();
+    if (name.endsWith('.xlsx') || name.endsWith('.xls')) {
+      result = await parseExcelFile(file);
+    } else {
+      const text = await file.text();
+      result = parseCSVText(text);
+    }
+
+    if (Object.keys(result.schedule).length === 0) {
+      alert('Не удалось найти данные. Проверьте формат файла.');
+      return;
+    }
+
+    await db.ref('schedule').set({ schedule: result.schedule, cats: result.categories });
+    scheduleData = result.schedule;
+    categories = result.categories;
+    const firstCat = Object.keys(result.categories)[0];
+    selectedCategory = firstCat;
+    selectedGroup = result.categories[firstCat][0];
+    selectedDay = 'Понедельник';
+    render();
+  } catch (err) {
+    alert('Ошибка: ' + (err.message || err));
+  } finally {
+    document.getElementById('loadingOverlay').classList.remove('open');
+  }
+}
+
+// ── Render ──────────────────────────────────────────────────────────────
+function render() {
+  const hasData = Object.keys(categories).length > 0;
+  document.getElementById('emptyState').style.display = hasData ? 'none' : 'flex';
+  document.getElementById('mainView').style.display = hasData ? 'block' : 'none';
+  document.getElementById('downloadBtn').disabled = !hasData;
+  if (!hasData) return;
+
+  renderCategories();
+  renderGroups();
+  renderDays();
+  renderSchedule();
+}
+
+function renderCategories() {
+  const cats = Object.keys(categories).sort();
+  document.getElementById('categoryChips').innerHTML = cats.map(cat => `
+    <button class="chip ${cat === selectedCategory ? 'active-cat' : ''}" onclick="selectCategory('${esc(cat)}')">
+      ${esc(cat)}
+    </button>
+  `).join('');
+}
+
+function renderGroups() {
+  const groups = categories[selectedCategory] || [];
+  document.getElementById('groupChips').innerHTML = groups.map(g => `
+    <button class="chip ${g === selectedGroup ? 'active-grp' : ''}" onclick="selectGroup('${esc(g)}')">
+      ${esc(g)}
+    </button>
+  `).join('');
+}
+
+function renderDays() {
+  document.getElementById('daysGrid').innerHTML = DAYS.map((day, idx) => {
+    const hasClasses = (scheduleData[selectedGroup]?.[day]?.length || 0) > 0;
+    const isSelected = selectedDay === day;
+    let cls = 'day-btn';
+    if (isSelected) cls += ' selected';
+    else if (hasClasses) cls += ' has-classes';
+    const dot = hasClasses && !isSelected ? '<div class="day-dot"></div>' : '';
+    const onclick = hasClasses ? `onclick="selectDay('${day}')"` : '';
+    return `<button class="${cls}" ${onclick}>${DAYS_SHORT[idx]}${dot}</button>`;
+  }).join('');
+}
+
+function renderSchedule() {
+  document.getElementById('schedGroupLabel').textContent = selectedGroup;
+  document.getElementById('schedDayLabel').textContent = selectedDay;
+
+  const classes = scheduleData[selectedGroup]?.[selectedDay] || [];
+  document.getElementById('countNum').textContent = classes.length;
+
+  if (classes.length === 0) {
+    document.getElementById('classList').innerHTML = `
+      <div class="no-classes">
+        <div class="emoji">😴</div>
+        <p>В этот день пар нет</p>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('classList').innerHTML = classes.map((item, idx) => {
+    const num = item.lessonNumber > 0 ? item.lessonNumber : idx + 1;
+    return `
+      <div class="class-card ${item.highlight ? 'highlighted' : ''}">
+        <div class="lesson-num">${num}</div>
+        <div class="class-info">
+          <div class="class-subject">
+            ${item.highlight ? '<span>⚠️</span>' : ''}
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(item.subject)}</span>
+          </div>
+          <div class="class-teacher">${esc(item.teacher)}</div>
+        </div>
+        <div class="room-badge">${esc(item.room)}</div>
+      </div>`;
+  }).join('');
+}
+
+// ── Actions ─────────────────────────────────────────────────────────────
+function selectCategory(cat) {
+  selectedCategory = cat;
+  const groups = categories[cat] || [];
+  selectedGroup = groups[0] || '';
+  selectedDay = 'Понедельник';
+  render();
+}
+
+function selectGroup(group) {
+  selectedGroup = group;
+  selectedDay = 'Понедельник';
+  render();
+}
+
+function selectDay(day) {
+  selectedDay = day;
+  renderDays();
+  renderSchedule();
+}
+
+function handleExport() {
+  if (!selectedGroup || !scheduleData[selectedGroup]) return;
+  const daySchedule = scheduleData[selectedGroup];
+  const rows = [['День недели','Предмет','Преподаватель','Кабинет']];
+  for (const [day, classes] of Object.entries(daySchedule)) {
+    classes.forEach(c => rows.push([day, c.subject, c.teacher, c.room]));
+  }
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, selectedGroup);
+  XLSX.writeFile(wb, `${selectedGroup}_расписание.xlsx`);
+}
+
+// ── Excel Parser ────────────────────────────────────────────────────────
+const DAY_MAP = {
+  'пон':'Понедельник','пн':'Понедельник','пнд':'Понедельник','понед':'Понедельник','понедельник':'Понедельник',
+  'вт':'Вторник','втр':'Вторник','вторн':'Вторник','вторник':'Вторник',
+  'ср':'Среда','срд':'Среда','сред':'Среда','среда':'Среда',
+  'чт':'Четверг','чтв':'Четверг','четв':'Четверг','четверг':'Четверг',
+  'пт':'Пятница','птн':'Пятница','пятн':'Пятница','пятница':'Пятница',
+  'сб':'Суббота','суб':'Суббота','субб':'Суббота','суббота':'Суббота',
+};
+
+function normalizeDay(raw) {
+  return DAY_MAP[raw.trim().toLowerCase().replace(/[.\s]+$/, '')] || '';
+}
+
+function isDayName(text) {
+  return normalizeDay(text) !== '' && !/^\d+$/.test(text);
+}
+
+function isGroupHeader(text) {
+  if (!text || text.length < 3) return false;
+  return /^[А-ЯA-Z]+\d+/.test(text.trim());
+}
+
+function parseCellContent(cellText) {
+  if (!cellText || !cellText.trim()) return { subject: '', teacher: '', room: '' };
+  const lines = cellText.split(/\r?\n/);
+  const allParts = [];
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const parts = line.split('\t').map(s => s.trim()).filter(Boolean);
+    allParts.push(...parts);
+  }
+  if (allParts.length === 0) return { subject: cellText.trim(), teacher: '', room: '' };
+  if (allParts.length === 1) return { subject: allParts[0], teacher: '', room: '' };
+  if (allParts.length === 2) {
+    const second = allParts[1];
+    if (/^\d+$/.test(second) || /^[А-Я0-9]{1,5}$/.test(second))
+      return { subject: allParts[0], teacher: '', room: second };
+    return { subject: allParts[0], teacher: second, room: '' };
+  }
+  if (allParts.length === 3) {
+    const third = allParts[2];
+    if (/^\d+$/.test(third) || third.length <= 5)
+      return { subject: allParts[0], teacher: allParts[1], room: third };
+    return { subject: allParts[0], teacher: allParts[1] + ' ' + third, room: '' };
+  }
+  return { subject: allParts[0], teacher: allParts[1] + ' ' + allParts[2], room: allParts[3] || '' };
+}
+
+function parseStyledComplexTable(rows) {
+  const schedule = {};
+  if (rows.length < 2) return schedule;
+
+  let headerRowIdx = 0;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i] && rows[i].some(c => isGroupHeader(c.value))) { headerRowIdx = i; break; }
+  }
+
+  const headerRow = rows[headerRowIdx];
+  const groupColumns = [];
+  headerRow.forEach((cell, idx) => {
+    if (isGroupHeader(cell.value)) groupColumns.push({ name: cell.value, colIdx: idx });
+  });
+  if (groupColumns.length === 0) return schedule;
+
+  let currentDay = '';
+  let lessonCounter = {};
+
+  for (let i = headerRowIdx + 1; i < rows.length; i++) {
+    const row = rows[i];
+    if (!row || row.length === 0) continue;
+    const firstCell = row[0]?.value || '';
+    if (firstCell && isDayName(firstCell)) {
+      currentDay = normalizeDay(firstCell);
+      lessonCounter = {};
+      continue;
+    }
+    if (!currentDay) continue;
+
+    for (const { name: group, colIdx } of groupColumns) {
+      const cell = row[colIdx];
+      if (!cell || !cell.value) continue;
+      const { value, fillColor } = cell;
+      const isRed = fillColor === 'FFFF0000' || fillColor === 'FF0000';
+      const { subject, teacher, room } = parseCellContent(value);
+      if (!subject) continue;
+
+      if (!schedule[group]) schedule[group] = {};
+      if (!schedule[group][currentDay]) schedule[group][currentDay] = [];
+      if (!lessonCounter[group]) lessonCounter[group] = 0;
+      lessonCounter[group]++;
+
+      schedule[group][currentDay].push({
+        subject,
+        teacher: teacher || (isRed ? '⚠️ Замена' : '—'),
+        room: room || '—',
+        highlight: isRed,
+        lessonNumber: lessonCounter[group],
+      });
+    }
+  }
+  return schedule;
+}
+
+function parseExcelFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const wb = XLSX.read(data, { type: 'array', cellStyles: true, cellText: true });
+        const allSchedule = {};
+        const cats = {};
+        wb.SheetNames.forEach(sheetName => {
+          const ws = wb.Sheets[sheetName];
+          if (!ws || !ws['!ref']) return;
+          const range = XLSX.utils.decode_range(ws['!ref']);
+          const rows = [];
+          for (let R = range.s.r; R <= range.e.r; R++) {
+            const row = [];
+            for (let C = range.s.c; C <= range.e.c; C++) {
+              const addr = XLSX.utils.encode_cell({ r: R, c: C });
+              const cell = ws[addr];
+              let value = '', fillColor = '';
+              if (cell) {
+                if (cell.v !== undefined && typeof cell.v === 'number') value = String(cell.v);
+                else if (cell.w !== undefined) value = String(cell.w);
+                else if (cell.v !== undefined) value = String(cell.v);
+                if (cell.s?.fgColor?.rgb) fillColor = cell.s.fgColor.rgb;
+                else if (cell.s?.bgColor?.rgb) fillColor = cell.s.bgColor.rgb;
+              }
+              row.push({ value, fillColor });
+            }
+            rows.push(row);
+          }
+          if (rows.length < 2) return;
+          const result = parseStyledComplexTable(rows);
+          const groups = Object.keys(result);
+          if (groups.length > 0) { cats[sheetName] = groups; Object.assign(allSchedule, result); }
+        });
+        resolve({ schedule: allSchedule, categories: cats });
+      } catch (err) { reject(err); }
+    };
+    reader.onerror = () => reject(new Error('Ошибка чтения файла'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function parseCSVText(text) {
+  const lines = text.trim().split(/\r?\n/).filter(l => l.trim());
+  const delim = (lines[0].match(/;/g)||[]).length > (lines[0].match(/,/g)||[]).length ? ';' : ',';
+  const rows = lines.map(line => line.split(delim).map(p => ({ value: p.trim().replace(/^"|"$/g,''), fillColor: '' })));
+  const schedule = parseStyledComplexTable(rows);
+  return { schedule, categories: { CSV: Object.keys(schedule) } };
+}
+
+// ── Utils ───────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
