@@ -551,7 +551,7 @@ function renderLessons(){
   document.getElementById('sched-count').textContent=unique.length;
   const container=document.getElementById('lesson-cards');
   if(!unique.length){container.innerHTML='<div class="empty-state"><div class="emoji">😴</div><p>В этот день пар нет</p></div>';return;}
-  container.innerHTML=unique.map((item,idx)=>{
+  container.innerHTML=lessons.map((item,idx)=>{
     const noteKey=`${selectedGroup}_${selectedDay}_${idx}`;
     const safeKey=noteKey.replace(/[.#$[\]]/g,'_');
     const cardClass=item.highlight?' highlight':item.remote?' remote':item.remoteGreen?' remote-green':item.remoteOrange?' remote-orange':'';
