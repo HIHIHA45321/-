@@ -12,734 +12,948 @@
 :root{--r:#C0394B;--rl:#F9E6E8;--rm:#E8909A;--rd:#8B1A28;--w:#fff;--bg:#FDF5F6;--brd:#F0C8CD;--t:#1A1A1A;--tm:#6B6B6B;--tl:#9B9B9B}
 body{background:var(--bg);min-height:100vh}
 .screen{display:none;min-height:100vh}.screen.active{display:block}
-.hdr{background:var(--w);border-bottom:2px solid var(--brd);padding:16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.hdr h1{font-size:18px;color:var(--rd);font-weight:700}
-.logout-btn{background:none;border:none;color:var(--r);font-size:14px;font-weight:600;cursor:pointer}
-.container{padding:16px;max-width:600px;margin:0 auto}
-.card{background:var(--w);border:2px solid var(--brd);border-radius:16px;padding:16px;margin-bottom:16px}
-.tabs{display:flex;gap:8px;margin-bottom:16px;background:var(--rl);padding:4px;border-radius:12px}
-.tab{flex:1;background:none;border:none;padding:8px;border-radius:8px;font-size:14px;font-weight:600;color:var(--r);cursor:pointer;transition:.2s}
-.tab.active{background:var(--r);color:var(--w)}
-.form-group{margin-bottom:12px}
-.form-group label{display:block;font-size:12px;color:var(--tm);font-weight:600;margin-bottom:4px;text-transform:uppercase}
-.input{width:100%;background:var(--bg);border:2px solid var(--brd);border-radius:10px;padding:10px 12px;font-size:15px;color:var(--t);outline:none;transition:.2s}
-.input:focus{border-color:var(--r)}
-.btn{width:100%;background:var(--r);color:var(--w);border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:600;cursor:pointer;transition:.2s}
-.btn:active{background:var(--rd)}
-.auth-err{color:var(--r);font-size:13px;font-weight:500;margin-top:8px;text-align:center;display:none}
-.welcome-box{margin-bottom:16px}
-.welcome-box h2{font-size:20px;color:var(--t);font-weight:700}
-.welcome-box p{font-size:14px;color:var(--tm)}
-.day-title{font-size:14px;color:var(--rd);font-weight:700;text-transform:uppercase;margin:16px 0 8px 4px}
-.lesson{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--rl)}
-.lesson:last-child{border-bottom:none}
-.lesson-num{font-size:16px;font-weight:700;color:var(--rm);min-width:18px}
-.lesson-info{flex:1}
-.lesson-name{font-size:15px;font-weight:600;color:var(--t)}
-.lesson-meta{font-size:13px;color:var(--tm);margin-top:2px}
-.no-lessons{font-size:14px;color:var(--tl);text-align:center;padding:16px 0}
-.notes-list{margin-top:12px}
-.note-item{background:var(--bg);border-radius:10px;padding:10px;margin-bottom:8px;position:relative}
-.note-text{font-size:14px;color:var(--t);white-space:pre-wrap;padding-right:24px}
-.note-time{font-size:11px;color:var(--tl);margin-top:4px}
-.note-del{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--tl);cursor:pointer;font-size:16px}
-.note-del:hover{color:var(--r)}
-#admin-panel{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(26,26,26,0.5);z-index:100;overflow-y:auto;padding:20px 10px}
-#admin-panel .card{max-width:500px;margin:40px auto;position:relative}
-.close-admin{position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;color:var(--tm);cursor:pointer}
-.loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.8);z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center}
-.spinner{width:32px;height:32px;border:3px solid var(--rl);border-top-color:var(--r);border-radius:50%;animation:spin 1s linear infinite}
+.hdr{background:var(--w);border-bottom:2px solid var(--brd);padding:0 16px;position:sticky;top:0;z-index:40;box-shadow:0 2px 12px rgba(192,57,75,.08)}
+.hdr-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:var(--r);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.logo-title{font-weight:700;font-size:16px;color:var(--t);line-height:1.2}
+.logo-sub{font-size:11px;color:var(--tm);line-height:1.2}
+.dot{width:8px;height:8px;border-radius:50%;background:#ef4444;margin-left:4px;flex-shrink:0}
+.dot.online{background:#22c55e}
+.hdr-btns{display:flex;gap:8px}
+.hdr-btn{padding:8px 12px;border-radius:10px;border:1.5px solid var(--brd);background:var(--w);color:var(--r);font-weight:600;font-size:13px;cursor:pointer}
+.content{max-width:800px;margin:0 auto;padding:16px 16px 100px}
+.welcome-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.welcome-icon{width:80px;height:80px;background:var(--rl);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:20px}
+.welcome-title{font-size:26px;font-weight:800;color:var(--t);margin-bottom:8px;text-align:center}
+.welcome-sub{font-size:15px;color:var(--tm);margin-bottom:36px;text-align:center}
+.mode-cards{display:flex;flex-direction:column;gap:12px;width:100%;max-width:360px}
+.mode-card{background:var(--w);border:2px solid var(--brd);border-radius:16px;padding:20px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:16px}
+.mode-card:hover{border-color:var(--r);box-shadow:0 4px 16px rgba(192,57,75,.12)}
+.mode-card.primary{background:var(--r);border-color:var(--r)}
+.mode-card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.mode-card.primary .mode-card-icon{background:rgba(255,255,255,.2)}
+.mode-card:not(.primary) .mode-card-icon{background:var(--rl)}
+.mode-card-title{font-size:16px;font-weight:700;color:var(--t)}
+.mode-card.primary .mode-card-title{color:var(--w)}
+.mode-card-desc{font-size:13px;color:var(--tm);margin-top:2px}
+.mode-card.primary .mode-card-desc{color:rgba(255,255,255,.8)}
+.auth-wrap{max-width:420px;margin:0 auto;padding:24px 16px}
+.auth-back{display:flex;align-items:center;gap:8px;color:var(--r);font-weight:600;font-size:14px;cursor:pointer;margin-bottom:24px;background:none;border:none}
+.auth-card{background:var(--w);border-radius:20px;padding:28px;border:1.5px solid var(--brd)}
+.auth-icon{width:56px;height:56px;background:var(--rl);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:16px}
+.auth-title{font-size:20px;font-weight:700;color:var(--t);margin-bottom:4px}
+.auth-sub{font-size:14px;color:var(--tm);margin-bottom:24px}
+.form-label{font-size:13px;font-weight:600;color:var(--tm);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.4px}
+.form-input{width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid var(--brd);font-size:15px;outline:none;color:var(--t);margin-bottom:16px;transition:border-color .15s}
+.form-input:focus{border-color:var(--r)}
+.btn-primary{width:100%;padding:15px;border-radius:14px;border:none;background:var(--r);color:var(--w);font-weight:700;font-size:16px;cursor:pointer;transition:opacity .15s}
+.btn-primary:active{opacity:.8}
+.btn-primary:disabled{background:#ddd;color:#999;cursor:not-allowed}
+.auth-switch{text-align:center;margin-top:16px;font-size:14px;color:var(--tm)}
+.auth-switch span{color:var(--r);font-weight:600;cursor:pointer}
+.form-error{color:var(--r);font-size:13px;margin-bottom:12px;padding:10px 14px;background:var(--rl);border-radius:10px}
+.teacher-info-box{background:#FFF0F2;border-radius:12px;padding:16px;margin-bottom:16px;color:#8B1A28;font-size:14px;line-height:1.6}
+.reg-group-hint{font-size:12px;color:var(--tm);margin-bottom:8px}
+.reg-group-selected-label{background:var(--rl);padding:8px 12px;border-radius:10px;font-size:14px;font-weight:600;color:var(--rd);margin-bottom:12px}
+.section-label{font-size:12px;font-weight:600;color:var(--tm);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{padding:8px 16px;border-radius:10px;border:1.5px solid var(--brd);background:var(--w);color:var(--t);font-weight:600;font-size:13px;cursor:pointer;transition:all .15s}
+.chip.active{background:var(--r);border-color:var(--r);color:var(--w)}
+.chip.active-dark{background:var(--rd);border-color:var(--rd);color:var(--w)}
+.days-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;background:var(--w);border-radius:16px;padding:12px;border:1.5px solid var(--brd);margin-bottom:20px}
+.day-btn{padding:10px 4px;border-radius:10px;border:none;background:transparent;color:var(--tl);font-weight:500;font-size:13px;cursor:default;text-align:center}
+.day-btn.has{background:var(--rl);color:var(--r);cursor:pointer;font-weight:600}
+.day-btn.active{background:var(--r);color:var(--w);font-weight:700}
+.day-dot{width:4px;height:4px;border-radius:50%;background:var(--r);margin:3px auto 0}
+.sched-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sched-title{font-size:20px;font-weight:700;color:var(--t)}
+.sched-sub{font-size:14px;color:var(--tm)}
+.count-badge{background:var(--rl);border-radius:10px;padding:8px 14px;text-align:center}
+.count-num{font-size:20px;font-weight:700;color:var(--r);line-height:1}
+.count-lbl{font-size:11px;color:var(--rm);margin-top:2px}
+.lesson-cards{display:flex;flex-direction:column;gap:8px}
+.lesson-card{background:var(--w);border:1.5px solid var(--brd);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px}
+.lesson-card.highlight{background:#FFF0F2;border-color:var(--rm)}
+.lesson-card.remote{background:#FFFDE7;border-color:#F9A825}
+.lesson-card.remote-green{background:#F1FAEB;border-color:#7AB648}
+.lesson-card.remote-orange{background:#FFF8E1;border-color:#E6AC00}
+.lesson-num{width:36px;height:36px;border-radius:10px;background:var(--rl);color:var(--r);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0}
+.lesson-card.highlight .lesson-num{background:var(--r);color:var(--w)}
+.lesson-card.remote .lesson-num{background:#F9A825;color:#fff}
+.lesson-card.remote-green .lesson-num{background:#7AB648;color:#fff}
+.lesson-card.remote-orange .lesson-num{background:#E6AC00;color:#fff}
+.remote-badge{border-radius:8px;padding:3px 8px;font-size:11px;font-weight:700;display:inline-block;margin-top:3px}
+.remote-badge.yellow{background:#FFF8E1;border:1.5px solid #F9A825;color:#E65100}
+.remote-badge.green{background:#E8F5E0;border:1.5px solid #7AB648;color:#3A6B1A}
+.remote-badge.orange{background:#FFF3CC;border:1.5px solid #E6AC00;color:#7A5000}
+.lesson-info{flex:1;min-width:0}
+.lesson-subject{font-weight:600;font-size:14px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.lesson-teacher{font-size:12px;color:var(--tm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lesson-room{background:var(--rl);color:var(--rd);border-radius:8px;padding:6px 10px;font-size:13px;font-weight:700;flex-shrink:0;text-align:center;min-width:44px}
+.note-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--brd);background:var(--w);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.note-btn.has-note{background:var(--rl);border-color:var(--rm)}
+.inline-note{margin-top:7px;background:#FFF9E6;border:1.5px dashed #F9A825;border-radius:9px;padding:7px 10px;font-size:12px;color:#7A5000;cursor:pointer;line-height:1.4;word-break:break-word;position:relative}
+.inline-note:hover{background:#FFF3CC;border-color:#E6AC00}
+.inline-note-icon{font-size:13px;margin-right:4px}
+.inline-note-empty{margin-top:7px;color:var(--tm);font-size:11px;cursor:pointer;padding:4px 2px;display:inline-flex;align-items:center;gap:4px;opacity:.6}
+.inline-note-empty:hover{opacity:1;color:var(--r)}
+.empty-state{background:var(--w);border:1.5px solid var(--brd);border-radius:16px;padding:48px 24px;text-align:center}
+.empty-state .emoji{font-size:48px;margin-bottom:12px}
+.empty-state p{color:var(--tm);font-weight:500}
+.teacher-day-block{margin-bottom:20px}
+.teacher-day-title{font-size:15px;font-weight:700;color:var(--t);margin-bottom:10px;padding:8px 14px;background:var(--rl);border-radius:10px;border-left:4px solid var(--r)}
+.teacher-lesson{background:var(--w);border:1.5px solid var(--brd);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.teacher-group-badge{background:var(--rd);color:var(--w);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;flex-shrink:0}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-sheet{background:var(--w);border-radius:24px 24px 0 0;padding:24px;width:100%;max-width:600px;max-height:80vh;overflow-y:auto}
+.modal-handle{width:40px;height:4px;border-radius:2px;background:var(--brd);margin:0 auto 20px}
+.modal-title{font-size:18px;font-weight:700;color:var(--t);margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--tm);margin-bottom:16px}
+.note-textarea{width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--brd);font-size:15px;resize:none;outline:none;color:var(--t);min-height:120px;margin-bottom:16px;font-family:inherit}
+.note-textarea:focus{border-color:var(--r)}
+.modal-btns{display:flex;gap:10px}
+.btn-secondary{flex:1;padding:13px;border-radius:12px;border:1.5px solid var(--brd);background:var(--w);color:var(--tm);font-weight:600;font-size:15px;cursor:pointer}
+.btn-danger{flex:1;padding:13px;border-radius:12px;border:none;background:#fee2e2;color:#991b1b;font-weight:600;font-size:15px;cursor:pointer}
+.footer{position:fixed;bottom:0;left:0;right:0;background:var(--w);border-top:2px solid var(--brd);padding:12px 16px;box-shadow:0 -4px 16px rgba(192,57,75,.08)}
+.footer-inner{max-width:800px;margin:0 auto;display:flex;gap:10px}
+.footer-main-btn{flex:1;padding:14px;border-radius:14px;border:none;background:var(--r);color:var(--w);font-weight:700;font-size:15px;cursor:pointer}
+.footer-main-btn:disabled{background:#ddd;color:#999;cursor:not-allowed}
+.footer-exit-btn{padding:14px 16px;border-radius:14px;border:1.5px solid var(--brd);background:var(--w);color:var(--tm);font-weight:600;font-size:14px;cursor:pointer}
+.admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center}
+.admin-overlay.open{display:flex}
+.admin-card{background:var(--w);border-radius:20px;padding:28px;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,.18)}
+.admin-title{font-size:18px;font-weight:700;color:var(--t);margin-bottom:4px}
+.admin-sub{font-size:13px;color:var(--tm);margin-bottom:20px}
+.admin-error{color:var(--r);font-size:13px;padding:8px 12px;background:var(--rl);border-radius:8px;margin-bottom:12px}
+.admin-action-btn{width:100%;padding:15px;border-radius:12px;border:1.5px solid var(--brd);background:var(--w);color:var(--t);font-size:15px;font-weight:600;cursor:pointer;text-align:left;margin-bottom:10px;display:flex;align-items:center;gap:12px;transition:all .15s}
+.admin-action-btn:hover{border-color:var(--r);background:var(--rl);color:var(--r)}
+.admin-back{background:none;border:none;color:var(--tm);font-size:13px;cursor:pointer;margin-bottom:16px;padding:0}
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(192,57,75,.12);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.loading-overlay.open{display:flex}
+.loading-card{background:var(--w);border-radius:20px;padding:32px 40px;text-align:center;box-shadow:0 8px 32px rgba(192,57,75,.2)}
+.spinner{width:48px;height:48px;border:3px solid var(--rl);border-top-color:var(--r);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{margin-top:12px;font-size:14px;color:var(--r);font-weight:600}
-.search-box{margin-bottom:16px;position:relative}
-.suggestions{position:absolute;top:100%;left:0;right:0;background:var(--w);border:2px solid var(--brd);border-top:none;border-radius:0 0 12px 12px;max-height:200px;overflow-y:auto;z-index:5;display:none}
-.suggestion-item{padding:10px 12px;font-size:14px;color:var(--t);cursor:pointer;border-bottom:1px solid var(--rl)}
-.suggestion-item:last-child{border-bottom:none}
-.suggestion-item:hover{background:var(--rl)}
-
-/* ОБНОВЛЕННЫЕ СТИЛИ ВСТРОЕННЫХ ЗАМЕТОК ПО ВАШЕМУ ЗАПРОСУ */
-.inline-note{margin-top:7px;background:#FFF3E0;border:2px solid #FF9800;border-radius:9px;padding:8px 12px;font-size:12px;color:#E65100;cursor:pointer;line-height:1.4;word-break:break-word;position:relative;font-weight:600}
-.inline-note:hover{background:#FFE0B2;border-color:#F57C00}
+.loading-text{color:var(--r);font-weight:600}
+.user-badge{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--rl);border-radius:10px}
+.user-badge-name{font-size:13px;font-weight:600;color:var(--rd)}
+.user-badge-role{font-size:11px;color:var(--rm)}
+@media(max-width:480px){.welcome-title{font-size:22px}.auth-card{padding:20px}.hdr-btn{padding:6px 10px;font-size:12px}}
 </style>
 </head>
 <body>
 
-<div class="loading-overlay" id="loading">
-  <div class="spinner"></div>
-  <div class="loading-text" id="loading-txt">Загрузка...</div>
+<div class="admin-overlay" id="admin-modal" onclick="if(event.target===this)closeAdminPanel()">
+  <div class="admin-card">
+    <div id="admin-pw-step">
+      <div class="admin-title">🔐 Панель администратора</div>
+      <div class="admin-sub">Введите пароль для доступа</div>
+      <div class="admin-error" id="admin-pw-error" style="display:none">Неверный пароль</div>
+      <label class="form-label">Пароль</label>
+      <input class="form-input" id="admin-pw-input" type="password" placeholder="Пароль администратора" onkeydown="if(event.key==='Enter')adminCheckPw()">
+      <div style="display:flex;gap:10px">
+        <button class="btn-secondary" style="flex:1" onclick="closeAdminPanel()">Отмена</button>
+        <button class="btn-primary" style="flex:2" onclick="adminCheckPw()">Войти</button>
+      </div>
+    </div>
+    <div id="admin-main-step" style="display:none">
+      <div class="admin-title">⚙️ Что сделать?</div>
+      <div class="admin-sub" style="margin-bottom:16px">Выберите действие</div>
+      <button class="admin-action-btn" onclick="adminGoUpload()">
+        <span style="font-size:24px">📂</span>
+        <div><div style="font-weight:700">Загрузить расписание</div><div style="font-size:12px;color:var(--tm);font-weight:400">Файл .xlsx или .xls</div></div>
+      </button>
+      <button class="admin-action-btn" onclick="adminGoCreateTeacher()">
+        <span style="font-size:24px">👨‍🏫</span>
+        <div><div style="font-weight:700">Создать аккаунт преподавателя</div><div style="font-size:12px;color:var(--tm);font-weight:400">Логин и пароль для входа</div></div>
+      </button>
+      <button class="admin-action-btn" onclick="adminGoBulkTeachers()">
+        <span style="font-size:24px">👥</span>
+        <div><div style="font-weight:700">Создать преподавателей из расписания</div><div style="font-size:12px;color:var(--tm);font-weight:400">Авто-поиск всех преподавателей</div></div>
+      </button>
+      <input type="file" id="admin-file-input" accept=".xlsx,.xls" style="display:none">
+      <button class="btn-secondary" style="width:100%;margin-top:4px" onclick="closeAdminPanel()">Закрыть</button>
+    </div>
+    <div id="admin-teacher-step" style="display:none">
+      <button class="admin-back" onclick="document.getElementById('admin-main-step').style.display='block';document.getElementById('admin-teacher-step').style.display='none'">← Назад</button>
+      <div class="admin-title">👨‍🏫 Новый преподаватель</div>
+      <div class="admin-sub">Заполните данные аккаунта</div>
+      <div class="admin-error" id="admin-t-error" style="display:none"></div>
+      <label class="form-label">ФИО (как в расписании)</label>
+      <input class="form-input" id="admin-t-name" type="text" placeholder="Например: БОЛГОВА Н.А.">
+      <label class="form-label">Логин</label>
+      <input class="form-input" id="admin-t-login" type="text" placeholder="Только латиница и цифры">
+      <label class="form-label">Пароль</label>
+      <input class="form-input" id="admin-t-pw" type="text" placeholder="Придумайте пароль">
+      <div style="display:flex;gap:10px">
+        <button class="btn-secondary" style="flex:1" onclick="closeAdminPanel()">Отмена</button>
+        <button class="btn-primary" style="flex:2" onclick="adminCreateTeacher()">Создать</button>
+      </div>
+    </div>
+    <div id="admin-bulk-step" style="display:none">
+      <button class="admin-back" onclick="document.getElementById('admin-main-step').style.display='block';document.getElementById('admin-bulk-step').style.display='none'">← Назад</button>
+      <div class="admin-title">👥 Преподаватели из расписания</div>
+      <div class="admin-sub">Найдены все преподаватели. Пароль по умолчанию — <b>teacher123</b></div>
+      <div id="admin-bulk-list" style="max-height:300px;overflow-y:auto;margin-bottom:12px;border:1.5px solid var(--brd);border-radius:12px;padding:8px"></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-secondary" style="flex:1" onclick="closeAdminPanel()">Отмена</button>
+        <button class="btn-primary" style="flex:2" onclick="adminBulkCreate()">Создать все</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="screen active" id="scr-auth">
-  <div class="container" style="padding-top:40px">
-    <div class="card">
-      <h1 style="text-align:center;color:var(--rd);margin-bottom:20px;font-size:22px">Расписание Колледжа</h1>
-      <div class="tabs">
-        <button class="tab active" id="tab-login" onclick="setAuthTab('login')">Вход</button>
-        <button class="tab" id="tab-reg" onclick="setAuthTab('reg')">Регистрация</button>
+<div class="loading-overlay" id="loading">
+  <div class="loading-card"><div class="spinner"></div><div class="loading-text" id="loading-text">Загрузка...</div></div>
+</div>
+
+<div class="modal-overlay" id="note-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="note-modal-title">Заметка</div>
+    <div class="modal-sub" id="note-modal-sub"></div>
+    <textarea class="note-textarea" id="note-textarea" placeholder="Напишите заметку для себя..."></textarea>
+    <div class="modal-btns">
+      <button class="btn-secondary" onclick="closeNoteModal()">Отмена</button>
+      <button class="btn-danger" id="note-delete-btn" onclick="deleteNote()">Удалить</button>
+      <button class="btn-primary" style="flex:2" onclick="saveNote()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen active" id="screen-welcome">
+  <div class="welcome-wrap">
+    <div class="welcome-icon">📅</div>
+    <div class="welcome-title">Расписание колледжа</div>
+    <div class="welcome-sub">Войдите или продолжите как гость</div>
+    <div class="mode-cards">
+      <div class="mode-card primary" onclick="enterGuest()">
+        <div class="mode-card-icon">👁</div>
+        <div><div class="mode-card-title">Гость</div><div class="mode-card-desc">Смотреть расписание всех групп</div></div>
       </div>
-      <div class="tabs" style="background:none;padding:0;margin-bottom:16px">
-        <button class="tab active" id="role-student" onclick="setAuthRole('student')" style="border:1px solid var(--brd)">Студент</button>
-        <button class="tab" id="role-teacher" onclick="setAuthRole('teacher')" style="border:1px solid var(--brd)">Преподаватель</button>
+      <div class="mode-card" onclick="showAuth('student')">
+        <div class="mode-card-icon">🎓</div>
+        <div><div class="mode-card-title">Я студент</div><div class="mode-card-desc">Своё расписание и заметки</div></div>
       </div>
+      <div class="mode-card" onclick="showAuth('teacher')">
+        <div class="mode-card-icon">👨‍🏫</div>
+        <div><div class="mode-card-title">Я преподаватель</div><div class="mode-card-desc">Свои пары по всем группам</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH -->
+<div class="screen" id="screen-auth">
+  <div class="auth-wrap">
+    <button class="auth-back" onclick="goBack('welcome')">← Назад</button>
+    <div class="auth-card">
+      <div class="auth-icon" id="auth-icon">🎓</div>
+      <div class="auth-title" id="auth-title">Вход</div>
+      <div class="auth-sub" id="auth-sub">Введите данные</div>
+      <div id="auth-error" class="form-error" style="display:none"></div>
 
       <div id="form-login">
-        <div class="form-group">
-          <label>Логин</label>
-          <input type="text" class="input" id="login-username" placeholder="ivanov2026">
-        </div>
-        <div class="form-group">
-          <label>Пароль</label>
-          <input type="password" class="input" id="login-password" placeholder="••••">
-        </div>
-        <button class="btn" style="margin-top:12px" onclick="doLogin()">Войти</button>
+        <label class="form-label">Логин</label>
+        <input class="form-input" id="login-username" type="text" placeholder="Ваш логин">
+        <label class="form-label">Пароль</label>
+        <input class="form-input" id="login-password" type="password" placeholder="Пароль">
+        <button class="btn-primary" onclick="doLogin()">Войти</button>
+        <div class="auth-switch" id="reg-link">Нет аккаунта? <span onclick="toggleAuthForm('register')">Зарегистрироваться</span></div>
       </div>
 
-      <div id="form-reg" style="display:none">
-        <div class="form-group">
-          <label>ФИО полностью</label>
-          <input type="text" class="input" id="reg-name" placeholder="Иванов Иван Иванович">
+      <div id="form-register" style="display:none">
+        <div id="reg-teacher-msg" class="teacher-info-box" style="display:none">
+          👨‍🏫 Аккаунты преподавателей создаёт администратор.<br>
+          Обратитесь к нему чтобы получить логин и пароль.<br><br>
+          <span onclick="toggleAuthForm('login')" style="color:var(--r);font-weight:700;cursor:pointer">← Вернуться к входу</span>
         </div>
-        <div class="form-group">
-          <label>Логин (латиница)</label>
-          <input type="text" class="input" id="reg-username" placeholder="ivanov2026">
+        <div id="reg-student-form">
+          <label class="form-label">Ваше имя</label>
+          <input class="form-input" id="reg-name" type="text" placeholder="Например: Иванов Иван">
+          <label class="form-label">Придумайте логин</label>
+          <input class="form-input" id="reg-username" type="text" placeholder="Только латиница и цифры">
+          <label class="form-label">Ваша группа</label>
+          <div class="reg-group-hint">Сначала выберите отделение:</div>
+          <div id="reg-cat-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
+          <div class="reg-group-hint" id="reg-group-hint" style="display:none">Теперь выберите группу:</div>
+          <div id="reg-group-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+          <div id="reg-group-error" style="display:none;color:var(--r);font-size:13px;margin-bottom:8px">⚠️ Выберите группу</div>
+          <div id="reg-group-selected-label" class="reg-group-selected-label" style="display:none"></div>
+          <label class="form-label">Пароль</label>
+          <input class="form-input" id="reg-password" type="password" placeholder="Минимум 4 символа">
+          <button class="btn-primary" onclick="doRegister()">Создать аккаунт</button>
+          <div class="auth-switch">Уже есть аккаунт? <span onclick="toggleAuthForm('login')">Войти</span></div>
         </div>
-        <div class="form-group">
-          <label>Пароль</label>
-          <input type="password" class="input" id="reg-password" placeholder="Минимум 4 символа">
-        </div>
-        <div class="form-group" id="reg-group-container">
-          <label>Группа</label>
-          <div class="search-box">
-            <input type="text" class="input" id="reg-group-search" placeholder="Начните вводить группу..." oninput="onGroupSearch(this.value)" onfocus="onGroupSearch(this.value)">
-            <div class="suggestions" id="reg-group-suggest"></div>
-          </div>
-          <span style="color:var(--r);font-size:12px;display:none" id="reg-group-error">Выберите группу из списка!</span>
-        </div>
-        <button class="btn" style="margin-top:12px" onclick="doRegister()">Создать аккаунт</button>
       </div>
-
-      <div class="auth-err" id="auth-error"></div>
     </div>
   </div>
 </div>
 
-<div class="screen" id="scr-student">
-  <div class="hdr">
-    <h1 id="st-hdr-title">Студент</h1>
-    <button class="logout-btn" onclick="doLogout()">Выйти</button>
-  </div>
-  <div class="container">
-    <div class="welcome-box">
-      <h2 id="st-welcome-name">Загрузка...</h2>
-      <p id="st-welcome-group">Группа</p>
-    </div>
-    <div class="card">
-      <h3 style="font-size:16px;color:var(--t);margin-bottom:12px">Посмотреть другое расписание:</h3>
-      <div class="search-box" style="margin-bottom:0">
-        <input type="text" class="input" id="st-search" placeholder="Поиск группы..." oninput="onStSearch(this.value)" onfocus="onStSearch(this.value)">
-        <div class="suggestions" id="st-suggest"></div>
+<!-- SCHEDULE -->
+<div class="screen" id="screen-schedule">
+  <header class="hdr">
+    <div class="hdr-inner">
+      <div class="logo">
+        <div class="logo-icon">📅</div>
+        <div><div class="logo-title">Расписание</div><div class="logo-sub">ККОТИП</div></div>
+        <div class="dot" id="conn-dot"></div>
+      </div>
+      <div class="hdr-btns">
+        <button class="hdr-btn" onclick="window.open('https://kkotip-distant.ru/login/index.php','_blank')">🎓 Moodle</button>
+        <div id="user-badge-wrap"></div>
       </div>
     </div>
-    <div id="st-schedule-container"></div>
+  </header>
+  <div class="content">
+    <div id="cat-section"><div class="section-label">Отделение</div><div class="chips" id="cat-chips"></div></div>
+    <div id="group-section"><div class="section-label">Группа</div><div class="chips" id="group-chips"></div></div>
+    <div class="days-grid" id="days-grid"></div>
+    <div class="sched-header">
+      <div><div class="sched-title" id="sched-title">Группа</div><div class="sched-sub" id="sched-sub">Понедельник</div></div>
+      <div class="count-badge"><div class="count-num" id="sched-count">0</div><div class="count-lbl">пар</div></div>
+    </div>
+    <div class="lesson-cards" id="lesson-cards"></div>
   </div>
-</div>
-
-<div class="screen" id="scr-teacher">
-  <div class="hdr">
-    <h1 id="tch-hdr-title">Преподаватель</h1>
-    <button class="logout-btn" onclick="doLogout()">Выйти</button>
-  </div>
-  <div class="container">
-    <div class="welcome-box">
-      <h2 id="tch-welcome-name">Загрузка...</h2>
-      <p>Личный кабинет преподавателя</p>
-    </div>
-    <div class="tabs">
-      <button class="tab active" id="tch-tab-sched" onclick="setTchTab('sched')">Расписание</button>
-      <button class="tab" id="tch-tab-notes" onclick="setTchTab('notes')">Заметки</button>
-    </div>
-    <div id="tch-content-sched">
-      <div id="tch-schedule-container"></div>
-    </div>
-    <div id="tch-content-notes" style="display:none">
-      <div class="card">
-        <div class="form-group" style="margin-bottom:8px">
-          <label>Новая заметка</label>
-          <textarea class="input" id="note-input" rows="3" placeholder="Введите текст заметки..." style="resize:none;font-family:inherit"></textarea>
-        </div>
-        <button class="btn" onclick="addNote()">Добавить</button>
-      </div>
-      <div class="notes-list" id="notes-container"></div>
+  <div class="footer">
+    <div class="footer-inner">
+      <button class="footer-main-btn" id="download-btn" onclick="doExport()">💾 Скачать расписание</button>
+      <button class="footer-exit-btn" onclick="exitToWelcome()">Выйти</button>
     </div>
   </div>
 </div>
 
-<div id="admin-panel">
-  <div class="card">
-    <button class="close-admin" onclick="closeAdminPanel()">×</button>
-    
-    <div id="admin-pw-step">
-      <h2 style="font-size:18px;color:var(--rd);margin-bottom:16px">Вход в панель администратора</h2>
-      <div class="form-group">
-        <label>Пароль</label>
-        <input type="password" class="input" id="admin-pw-input" placeholder="••••">
+<!-- TEACHER -->
+<div class="screen" id="screen-teacher">
+  <header class="hdr">
+    <div class="hdr-inner">
+      <div class="logo">
+        <div class="logo-icon">📅</div>
+        <div><div class="logo-title">Расписание</div><div class="logo-sub">ККОТИП</div></div>
+        <div class="dot" id="conn-dot-t"></div>
       </div>
-      <span style="color:var(--r);font-size:13px;display:none;margin-bottom:12px" id="admin-pw-error">Неверный пароль администратора</span>
-      <button class="btn" onclick="adminCheckPw()">Подтвердить</button>
+      <div class="hdr-btns"><div id="teacher-badge-wrap"></div></div>
     </div>
-
-    <div id="admin-main-step" style="display:none">
-      <h2 style="font-size:18px;color:var(--rd);margin-bottom:16px">Управление расписанием</h2>
-      <div style="margin-bottom:20px">
-        <button class="btn" style="background:#27AE60" onclick="adminGoUpload()"> Загрузить Excel (.xlsx)</button>
-        <input type="file" id="admin-file-input" accept=".xlsx" style="display:none" onchange="adminHandleFile(event)">
-      </div>
-      <hr style="border:none;border-top:1px solid var(--brd);margin-bottom:16px">
-      <h3 style="font-size:14px;color:var(--t);margin-bottom:12px">Регистрация преподавателя (вручную)</h3>
-      <div class="form-group">
-        <label>ФИО</label>
-        <input type="text" class="input" id="adm-t-name" placeholder="Петров Петр Петрович">
-      </div>
-      <div class="form-group">
-        <label>Логин</label>
-        <input type="text" class="input" id="adm-t-user" placeholder="petrov_p">
-      </div>
-      <div class="form-group">
-        <label>Пароль</label>
-        <input type="text" class="input" id="adm-t-pw" placeholder="Задайте пароль">
-      </div>
-      <button class="btn" style="margin-bottom:16px" onclick="adminCreateTeacher()">Создать аккаунт преподавателя</button>
-      
-      <div id="admin-bulk-box" style="display:none;background:var(--rl);padding:12px;border-radius:10px">
-        <p style="font-size:13px;color:var(--rd);font-weight:600;margin-bottom:8px" id="admin-bulk-txt">Найдено новых преподавателей: 0</p>
-        <button class="btn" onclick="adminBulkCreate()">Зарегистрировать их автоматически</button>
-      </div>
+  </header>
+  <div class="content">
+    <div class="section-label" style="margin-bottom:12px">Ваши пары на неделю</div>
+    <div id="teacher-schedule"></div>
+  </div>
+  <div class="footer">
+    <div class="footer-inner">
+      <button class="footer-exit-btn" style="flex:1" onclick="exitToWelcome()">← Выйти из аккаунта</button>
     </div>
   </div>
 </div>
 
 <script>
-// ИНИЦИАЛИЗАЦИЯ FIREBASE
-const firebaseConfig = {
-  databaseURL: "https://alex-37be2-default-rtdb.firebaseio.com/"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const fbConfig={apiKey:"AIzaSyDQLn1VTn_ZzIy73UhuQ46qc2CEApuEMI8",authDomain:"alex-37be2.firebaseapp.com",databaseURL:"https://alex-37be2-default-rtdb.firebaseio.com",projectId:"alex-37be2",storageBucket:"alex-37be2.firebasestorage.app",messagingSenderId:"344988588249",appId:"1:344988588249:web:c9b80008c76e49603b86c8"};
+firebase.initializeApp(fbConfig);
+const db=firebase.database();
 
-// СЕКРЕТНЫЙ ХЭШ АДМИНИСТРАТОРА И ФЛАГ ЗАЩИТЫ
+let scheduleData={},categoriesData={},currentUser=null,currentMode='guest',authRole='student';
+let selectedCategory='',selectedGroup='',selectedDay='Понедельник';
+let selectedRegCat='',selectedRegGroup='';
+let noteCurrentKey=null,noteCurrentSafeKey=null;
+const DAYS=['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+const DAYS_SHORT=['Пн','Вт','Ср','Чт','Пт','Сб'];
 const ADMIN_HASH='be106bd142bb15113747f6578c158a6bc6c449b20f3f17b4b355c5ce3f64856b';
-let adminVerified = false; 
 
-// ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-let authRole = 'student';
-let currentUser = null;
-let currentMode = 'student';
-let allGroups = [];
-let selectedRegGroup = '';
-let bulkTeacherList = [];
+// Загрузка из Firebase
+db.ref('schedule').on('value',snap=>{
+  document.querySelectorAll('.dot').forEach(d=>d.classList.add('online'));
+  const data=snap.val();
+  if(data?.schedule&&data?.cats){
+    scheduleData=data.schedule;
+    categoriesData=data.cats;
+    renderRegCats();
+    if(currentMode==='guest')renderScheduleScreen();
+    if(currentMode==='student'&&currentUser)renderScheduleScreen();
+    if(currentMode==='teacher'&&currentUser)renderTeacherScreen();
+  }
+},()=>document.querySelectorAll('.dot').forEach(d=>d.classList.remove('online')));
 
-// ХЭШИРОВАНИЕ SHA-256
-async function hashPassword(pw) {
-  const msgBuffer = new TextEncoder().encode(pw);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
+// Восстановление сессии
+try{
+  const saved=sessionStorage.getItem('user');
+  if(saved){
+    currentUser=JSON.parse(saved);
+    currentMode=currentUser.role==='teacher'?'teacher':'student';
+    if(currentMode==='teacher')showTeacherScreen();
+    else showStudentScreen();
+  }
+}catch(e){}
 
-// ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК АВТОРИЗАЦИИ
-function setAuthTab(tab){
-  document.getElementById('tab-login').classList.toggle('active', tab==='login');
-  document.getElementById('tab-reg').classList.toggle('active', tab==='reg');
-  document.getElementById('form-login').style.display = tab==='login'?'block':'none';
-  document.getElementById('form-reg').style.display = tab==='reg'?'block':'none';
-  document.getElementById('auth-error').style.display = 'none';
-}
-function setAuthRole(role){
-  authRole = role;
-  document.getElementById('role-student').classList.toggle('active', role==='student');
-  document.getElementById('role-teacher').classList.toggle('active', role==='teacher');
-  document.getElementById('reg-group-container').style.display = role==='student'?'block':'none';
-  document.getElementById('auth-error').style.display = 'none';
-}
-function showAuthError(msg){
-  const e=document.getElementById('auth-error');
-  e.innerText=msg;e.style.display='block';
-}
-function showLoading(txt){
-  document.getElementById('loading-txt').innerText=txt;
-  document.getElementById('loading').style.display='flex';
-}
-function hideLoading(){
-  document.getElementById('loading').style.display='none';
-}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');window.scrollTo(0,0);}
+function goBack(to){showScreen(to);}
+function exitToWelcome(){currentUser=null;currentMode='guest';sessionStorage.removeItem('user');showScreen('welcome');}
 
-// ЗАГРУЗКА СПИСКА ГРУПП ИЗ БАЗЫ ДАННЫХ
-async function loadGroupsList(){
-  try{
-    const snap = await db.ref('schedule/groups').get();
-    if(snap.exists()) allGroups = Object.keys(snap.val()).sort();
-  }catch(e){console.error(e);}
+// AUTH
+function showAuth(role){
+  authRole=role;
+  document.getElementById('auth-icon').textContent=role==='student'?'🎓':'👨‍🏫';
+  document.getElementById('auth-title').textContent=role==='student'?'Студент':'Преподаватель';
+  document.getElementById('auth-sub').textContent=role==='student'?'Войдите или зарегистрируйтесь':'Войдите в свой аккаунт';
+  const regLink=document.getElementById('reg-link');
+  if(regLink)regLink.style.display=role==='teacher'?'none':'block';
+  clearAuthError();
+  toggleAuthForm('login');
+  showScreen('auth');
+  if(role==='student')renderRegCats();
 }
 
-// ПОИСК ГРУПП ПРИ РЕГИСТРАЦИИ
-function onGroupSearch(val){
-  const sug = document.getElementById('reg-group-suggest');
-  sug.innerHTML = '';
-  if(!allGroups.length){sug.style.display='none';return;}
-  const res = allGroups.filter(g => g.toLowerCase().includes(val.toLowerCase())).slice(0,5);
-  if(!res.length){sug.style.display='none';selectedRegGroup='';return;}
-  res.forEach(g => {
-    const d = document.createElement('div');
-    d.className = 'suggestion-item';
-    d.innerText = g;
-    d.onclick = () => {
-      document.getElementById('reg-group-search').value = g;
-      selectedRegGroup = g;
-      sug.style.display = 'none';
-      document.getElementById('reg-group-error').style.display='none';
-    };
-    sug.appendChild(d);
-  });
-  sug.style.display = 'block';
+function toggleAuthForm(type){
+  clearAuthError();
+  document.getElementById('form-login').style.display=type==='login'?'block':'none';
+  document.getElementById('form-register').style.display=type==='register'?'block':'none';
+  if(type==='register'){
+    const isTeacher=authRole==='teacher';
+    document.getElementById('reg-teacher-msg').style.display=isTeacher?'block':'none';
+    document.getElementById('reg-student-form').style.display=isTeacher?'none':'block';
+    if(!isTeacher)renderRegCats();
+  }
 }
 
-// БЕЗОПАСНЫЙ ВХОД ЧЕРЕЗ СЕКРЕТНЫЙ ТОКЕН ТЕПЕРЬ ТУТ
+function clearAuthError(){const el=document.getElementById('auth-error');el.style.display='none';el.textContent='';}
+function showAuthError(msg){const el=document.getElementById('auth-error');el.textContent=msg;el.style.display='block';}
+
+async function hashPassword(pw){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
 async function doLogin(){
-  const username=document.getElementById('login-username').value.trim().toLowerCase();
+  const username=document.getElementById('login-username').value.trim();
   const password=document.getElementById('login-password').value;
   if(!username||!password)return showAuthError('Заполните все поля');
   showLoading('Входим...');
   try{
-    const passwordHash = await hashPassword(password);
-    const userToken = username + '_' + passwordHash; 
-
-    const snap = await db.ref('users_secure/' + userToken).get();
-    
-    if(!snap.exists()){
-      hideLoading();
-      return showAuthError('Неверный логин или пароль');
-    }
-    
-    const user = snap.val();
-    if(user.role !== authRole){
-      hideLoading();
-      return showAuthError('Неверный тип аккаунта');
-    }
-    
-    currentUser = {username: userToken, displayUsername: username, name:user.name, role:user.role, group:user.group||''};
-    sessionStorage.setItem('user', JSON.stringify(currentUser));
-    currentMode = user.role;
+    const snap=await db.ref('users/'+username).get();
+    if(!snap.exists()){hideLoading();return showAuthError('Пользователь не найден');}
+    const user=snap.val();
+    if(user.role!==authRole){hideLoading();return showAuthError('Неверный тип аккаунта');}
+    const hash=await hashPassword(password);
+    if(hash!==user.passwordHash){hideLoading();return showAuthError('Неверный пароль');}
+    currentUser={username,name:user.name,role:user.role,group:user.group||''};
+    sessionStorage.setItem('user',JSON.stringify(currentUser));
+    currentMode=user.role;
     hideLoading();
-    if(user.role === 'teacher') showTeacherScreen();
+    if(user.role==='teacher')showTeacherScreen();
     else showStudentScreen();
-  }catch(e){hideLoading();showAuthError('Ошибка: ' + e.message);}
+  }catch(e){hideLoading();showAuthError('Ошибка: '+e.message);}
 }
 
-// БЕЗОПАСНАЯ РЕГИСТРАЦИЯ
 async function doRegister(){
   const name=document.getElementById('reg-name').value.trim();
   const username=document.getElementById('reg-username').value.trim().toLowerCase();
   const password=document.getElementById('reg-password').value;
   const group=selectedRegGroup;
   if(!name||!username||!password)return showAuthError('Заполните все поля');
-  if(authRole==='student'&&!group){document.getElementById('reg-group-error').style.display='block';return;}
+  if(!group){document.getElementById('reg-group-error').style.display='block';return;}
   if(password.length<4)return showAuthError('Пароль минимум 4 символа');
   if(!/^[a-z0-9_]+$/.test(username))return showAuthError('Логин: только латиница, цифры, _');
   showLoading('Создаём аккаунт...');
   try{
-    const passwordHash = await hashPassword(password);
-    const userToken = username + '_' + passwordHash;
-
-    const snap = await db.ref('users_secure/' + userToken).get();
-    if(snap.exists()){hideLoading();return showAuthError('Такой аккаунт уже существует');}
-    
-    await db.ref('users_secure/' + userToken).set({name, role:'student', group, loginName:username});
-    
-    currentUser = {username: userToken, displayUsername: username, name, role:'student', group};
-    sessionStorage.setItem('user', JSON.stringify(currentUser));
-    currentMode = 'student';
+    const snap=await db.ref('users/'+username).get();
+    if(snap.exists()){hideLoading();return showAuthError('Логин уже занят');}
+    const passwordHash=await hashPassword(password);
+    await db.ref('users/'+username).set({name,passwordHash,role:'student',group});
+    currentUser={username,name,role:'student',group};
+    sessionStorage.setItem('user',JSON.stringify(currentUser));
+    currentMode='student';
     hideLoading();
     showStudentScreen();
-  }catch(e){hideLoading();showAuthError('Ошибка: ' + e.message);}
+  }catch(e){hideLoading();showAuthError('Ошибка: '+e.message);}
 }
 
-// ВЫХОД
-function doLogout(){
-  sessionStorage.removeItem('user');
-  currentUser = null;
-  document.getElementById('scr-student').classList.remove('active');
-  document.getElementById('scr-teacher').classList.remove('active');
-  document.getElementById('scr-auth').classList.add('active');
-  setAuthTab('login');
+// Категории и группы в регистрации
+function renderRegCats(){
+  const cats=Object.keys(categoriesData).sort();
+  const el=document.getElementById('reg-cat-chips');
+  if(!el)return;
+  el.innerHTML=cats.map(cat=>
+    `<button type="button" class="chip${cat===selectedRegCat?' active':''}" onclick="selectRegCat('${esc(cat)}')">${esc(cat)}</button>`
+  ).join('');
+}
+function selectRegCat(cat){
+  selectedRegCat=cat;selectedRegGroup='';
+  document.getElementById('reg-group-selected-label').style.display='none';
+  document.getElementById('reg-group-error').style.display='none';
+  document.querySelectorAll('#reg-cat-chips .chip').forEach(b=>{b.classList.remove('active');if(b.textContent===cat)b.classList.add('active');});
+  const groups=categoriesData[cat]||[];
+  document.getElementById('reg-group-hint').style.display='block';
+  document.getElementById('reg-group-chips').innerHTML=groups.map(g=>
+    `<button type="button" class="chip" onclick="selectRegGroup('${esc(g)}')">${esc(g)}</button>`
+  ).join('');
+}
+function selectRegGroup(g){
+  selectedRegGroup=g;
+  document.getElementById('reg-group-error').style.display='none';
+  document.querySelectorAll('#reg-group-chips .chip').forEach(b=>{b.classList.remove('active-dark');if(b.textContent===g)b.classList.add('active-dark');});
+  const lbl=document.getElementById('reg-group-selected-label');
+  lbl.textContent='✓ Выбрана группа: '+g;lbl.style.display='block';
 }
 
-// ЭКРАН СТУДЕНТА
-function showStudentScreen(){
-  document.getElementById('scr-auth').classList.remove('active');
-  document.getElementById('scr-student').classList.add('active');
-  document.getElementById('st-welcome-name').innerText = currentUser.name;
-  document.getElementById('st-welcome-group').innerText = 'Ваша основная группа: ' + currentUser.group;
-  document.getElementById('st-search').value = '';
-  renderSchedule(currentUser.group, 'student');
-}
-function onStSearch(val){
-  const sug = document.getElementById('st-suggest');
-  sug.innerHTML = '';
-  if(!allGroups.length){sug.style.display='none';return;}
-  const res = allGroups.filter(g => g.toLowerCase().includes(val.toLowerCase())).slice(0,5);
-  if(!res.length){sug.style.display='none';return;}
-  res.forEach(g => {
-    const d = document.createElement('div');
-    d.className = 'suggestion-item';
-    d.innerText = g;
-    d.onclick = () => {
-      document.getElementById('st-search').value = g;
-      sug.style.display = 'none';
-      renderSchedule(g, 'student');
-    };
-    sug.appendChild(d);
-  });
-  sug.style.display = 'block';
-}
+// GUEST
+function enterGuest(){currentMode='guest';currentUser=null;selectedCategory='';selectedGroup='';selectedDay='Понедельник';showScreen('schedule');renderScheduleScreen();}
 
-// ЭКРАН ПРЕПОДАВАТЕЛЯ
-function showTeacherScreen(){
-  document.getElementById('scr-auth').classList.remove('active');
-  document.getElementById('scr-teacher').classList.add('active');
-  document.getElementById('tch-welcome-name').innerText = currentUser.name;
-  setTchTab('sched');
-}
-function setTchTab(tab){
-  document.getElementById('tch-tab-sched').classList.toggle('active', tab==='sched');
-  document.getElementById('tch-tab-notes').classList.toggle('active', tab==='notes');
-  document.getElementById('tch-content-sched').style.display = tab==='sched'?'block':'none';
-  document.getElementById('tch-content-notes').style.display = tab==='notes'?'block':'none';
-  if(tab==='sched') renderSchedule(currentUser.name, 'teacher');
-  if(tab==='notes') loadNotes();
-}
+// STUDENT
+function showStudentScreen(){selectedGroup=currentUser.group;selectedDay='Понедельник';showScreen('schedule');renderScheduleScreen();}
 
-// ОТРИСОВКА РАСПИСАНИЯ ИЗМЕНЕНА ПОД ОБНОВЛЕННЫЙ ПОДСЧЕТ И КАРТУ ПАР (БЕЗ UNIQUE)
-async function renderSchedule(target, mode){
-  const container = document.getElementById(mode==='student'?'st-schedule-container':'tch-schedule-container');
-  container.innerHTML = '<div class="card" style="text-align:center;color:var(--tm)">Загрузка расписания...</div>';
-  try{
-    const path = mode==='student' ? `schedule/groups/${target}` : `schedule/teachers/${target}`;
-    const snap = await db.ref(path).get();
-    container.innerHTML = '';
-    
-    if(mode==='student'){
-      const title = document.createElement('h2');
-      title.className = 'day-title';
-      title.style.color = 'var(--t)';
-      title.style.marginBottom = '16px';
-      title.innerText = 'Группа: ' + target;
-      container.appendChild(title);
-    }
-
-    if(!snap.exists()){
-      container.innerHTML = '<div class="card"><div class="no-lessons">Расписание не найдено</div></div>';
-      return;
-    }
-    const days = snap.val();
-    const daysOrder = ['ПОНЕДЕЛЬНИК','ВТОРНИК','СРЕДА','ЧЕТВЕРГ','ПЯТНИЦА','СУББОТА'];
-    
-    daysOrder.forEach(day => {
-      if(!days[day]) return;
-      const card = document.createElement('div');
-      card.className = 'card';
-      const dTitle = document.createElement('h3');
-      dTitle.className = 'day-title';
-      dTitle.innerText = day;
-      card.appendChild(dTitle);
-      
-      const lessons = days[day];
-      let hasLessons = false;
-      
-      // ВАШИ ИЗМЕНЕНИЯ ИНТЕРФЕЙСА УЖЕ ВСТРОЕНЫ
-      // Отображаем все уроки без отсечения unique:
-      for(let num=1; num<=8; num++){
-        if(lessons[num]){
-          hasLessons = true;
-          const les = lessons[num];
-          const lDiv = document.createElement('div');
-          lDiv.className = 'lesson';
-          lDiv.innerHTML = `
-            <div class="lesson-num">${num}</div>
-            <div class="lesson-info">
-              <div class="lesson-name">${les.name}</div>
-              <div class="lesson-meta">${mode==='student' ? les.teacher : les.group} • каб. ${les.room||'—'}</div>
-            </div>
-          `;
-          card.appendChild(lDiv);
-        }
-      }
-      if(!hasLessons) card.innerHTML += '<div class="no-lessons">Занятий нет</div>';
-      container.appendChild(card);
-    });
-  }catch(e){container.innerHTML=`<div class="card" style="color:var(--r)">Ошибка: ${e.message}</div>`;}
-}
-
-// ЗАМЕТКИ (СВЯЗАНЫ С НОВЫМ ТОКЕНОМ ДЛЯ БЕЗОПАСНОСТИ)
-async function loadNotes(){
-  const container = document.getElementById('notes-container');
-  container.innerHTML = '<div style="text-align:center;color:var(--tm);font-size:14px">Загрузка заметок...</div>';
-  try{
-    const snap = await db.ref('notes/' + currentUser.username).get();
-    container.innerHTML = '';
-    if(!snap.exists()){
-      container.innerHTML = '<div style="text-align:center;color:var(--tl);font-size:14px;padding:20px 0">У вас пока нет заметок</div>';
-      return;
-    }
-    const data = snap.val();
-    Object.keys(data).reverse().forEach(id => {
-      const n = data[id];
-      const d = document.createElement('div');
-      d.className = 'note-item';
-      d.innerHTML = `
-        <div class="note-text">${n.text}</div>
-        <div class="note-time">${n.time}</div>
-        <button class="note-del" onclick="deleteNote('${id}')">×</button>
-      `;
-      container.appendChild(d);
-    });
-  }catch(e){container.innerHTML=`<div style="color:var(--r);font-size:14px">Ошибка: ${e.message}</div>`;}
-}
-async function addNote(){
-  const txt = document.getElementById('note-input').value.trim();
-  if(!txt) return;
-  showLoading('Сохраняем...');
-  try{
-    const time = new Date().toLocaleString('ru-RU', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
-    await db.ref('notes/' + currentUser.username).push({text:txt, time});
-    document.getElementById('note-input').value = '';
-    hideLoading();
-    loadNotes();
-  }catch(e){hideLoading();alert('Ошибка: '+e.message);}
-}
-async function deleteNote(id){
-  if(!confirm('Удалить заметку?')) return;
-  showLoading('Удаляем...');
-  try{
-    await db.ref(`notes/${currentUser.username}/${id}`).remove();
-    hideLoading();
-    loadNotes();
-  }catch(e){hideLoading();alert('Ошибка: '+e.message);}
-}
-
-// АДМИН-ПАНЕЛЬ (ALT + P)
-window.addEventListener('keydown', (e) => {
-  if(e.altKey && (e.key==='p' || e.key==='р' || e.key==='P' || e.key==='Р')){
-    e.preventDefault();
-    document.getElementById('admin-panel').style.display = 'block';
-    if(adminVerified){
-      document.getElementById('admin-pw-step').style.display = 'none';
-      document.getElementById('admin-main-step').style.display = 'block';
-    }else{
-      document.getElementById('admin-pw-step').style.display = 'block';
-      document.getElementById('admin-main-step').style.display = 'none';
-      document.getElementById('admin-pw-input').value = '';
-      document.getElementById('admin-pw-error').style.display = 'none';
-    }
+// SCHEDULE
+function renderScheduleScreen(){
+  const isGuest=currentMode==='guest',isStudent=currentMode==='student';
+  const bw=document.getElementById('user-badge-wrap');
+  bw.innerHTML=isStudent&&currentUser?`<div class="user-badge"><div><div class="user-badge-name">${esc(currentUser.name)}</div><div class="user-badge-role">${esc(currentUser.group)}</div></div></div>`:'';
+  document.getElementById('cat-section').style.display=isGuest?'block':'none';
+  document.getElementById('group-section').style.display=isGuest?'block':'none';
+  if(isGuest){
+    const cats=Object.keys(categoriesData).sort();
+    if(!selectedCategory&&cats.length)selectedCategory=cats[0];
+    if(!selectedGroup&&categoriesData[selectedCategory]?.length)selectedGroup=categoriesData[selectedCategory][0];
+    renderCatChips(cats);renderGroupChips();
   }
-});
-function closeAdminPanel(){
-  document.getElementById('admin-panel').style.display = 'none';
+  renderDays();renderLessons();
+  document.getElementById('download-btn').disabled=!selectedGroup;
 }
 
-// ПРОВЕРКА ПАРОЛЯ АДМИНИСТРАТОРА С АКТИВАЦИЕЙ ФЛАГА БЕЗОПАСНОСТИ
-async function adminCheckPw(){
-  const pw = document.getElementById('admin-pw-input').value;
+function renderCatChips(cats){
+  document.getElementById('cat-chips').innerHTML=cats.map(cat=>
+    `<button class="chip${cat===selectedCategory?' active':''}" onclick="selectCat('${esc(cat)}')">${esc(cat)}</button>`
+  ).join('');
+}
+function renderGroupChips(){
+  document.getElementById('group-chips').innerHTML=(categoriesData[selectedCategory]||[]).map(g=>
+    `<button class="chip${g===selectedGroup?' active-dark':''}" onclick="selectGroup('${esc(g)}')">${esc(g)}</button>`
+  ).join('');
+}
+function renderDays(){
+  document.getElementById('days-grid').innerHTML=DAYS.map((day,i)=>{
+    const has=(scheduleData[selectedGroup]?.[day]?.length||0)>0;
+    const isActive=selectedDay===day;
+    let cls='day-btn';if(isActive)cls+=' active';else if(has)cls+=' has';
+    const dot=has&&!isActive?'<div class="day-dot"></div>':'';
+    return `<button class="${cls}" onclick="selectDay('${day}')">${DAYS_SHORT[i]}${dot}</button>`;
+  }).join('');
+}
+function renderLessons(){
+  const lessons=scheduleData[selectedGroup]?.[selectedDay]||[];
+  document.getElementById('sched-title').textContent=selectedGroup||'—';
+  document.getElementById('sched-sub').textContent=selectedDay;
+  // Убираем дубли: пропускаем если предмет+препод+кабинет совпадает с предыдущей
+  const unique=lessons.filter((item,idx)=>{
+    if(idx===0)return true;
+    const prev=lessons[idx-1];
+    return!(item.subject===prev.subject&&item.teacher===prev.teacher&&item.room===prev.room);
+  });
+  document.getElementById('sched-count').textContent=Math.ceil(lessons.length/2);
+  const container=document.getElementById('lesson-cards');
+  if(!unique.length){container.innerHTML='<div class="empty-state"><div class="emoji">😴</div><p>В этот день пар нет</p></div>';return;}
+  container.innerHTML=lessons.map((item,idx)=>{
+    const noteKey=`${selectedGroup}_${selectedDay}_${idx}`;
+    const safeKey=noteKey.replace(/[.#$[\]]/g,'_');
+    const cardClass=item.highlight?' highlight':item.remote?' remote':item.remoteGreen?' remote-green':item.remoteOrange?' remote-orange':'';
+    const prefix=item.highlight?'⚠️ ':item.remote?'🏠 ':item.remoteGreen?'💻 ':item.remoteOrange?'🔗 ':'';
+    const badge=item.remote?`<div class="remote-badge yellow">🏠 ДО</div>`:item.remoteGreen?`<div class="remote-badge green">💻 Дистант</div>`:item.remoteOrange?`<div class="remote-badge orange">🔗 Онлайн</div>`:'';
+    const noteArea=currentUser?`<div class="inline-note-empty" id="inote_${safeKey}" onclick="openNote('${noteKey}','${esc(item.subject)}',${idx})">✏️ Добавить заметку</div>`:'';
+    return `<div class="lesson-card${cardClass}">
+      <div class="lesson-num">${item.lessonNumber>0?item.lessonNumber:'—'}</div>
+      <div class="lesson-info">
+        <div class="lesson-subject">${prefix}${esc(item.subject)}</div>
+        <div class="lesson-teacher">${esc(item.teacher)}</div>
+        ${badge}
+        ${noteArea}
+      </div>
+      <div class="lesson-room">${esc(item.room)}</div></div>`;
+  }).join('');
+  if(currentUser){
+    unique.forEach((_,idx)=>{
+      const safeKey=`${selectedGroup}_${selectedDay}_${idx}`.replace(/[.#$[\]]/g,'_');
+      db.ref(`notes/${currentUser.username}/${safeKey}`).get().then(snap=>{
+        const el=document.getElementById('inote_'+safeKey);
+        if(!el)return;
+        const text=snap.exists()&&snap.val()?snap.val():'';
+        if(text){
+          el.className='inline-note';
+          el.innerHTML=`<span class="inline-note-icon">📝</span>${esc(text)}`;
+        }
+      });
+    });
+  }
+}
+
+function selectCat(cat){selectedCategory=cat;selectedGroup=categoriesData[cat]?.[0]||'';selectedDay='Понедельник';renderCatChips(Object.keys(categoriesData).sort());renderGroupChips();renderDays();renderLessons();}
+function selectGroup(g){selectedGroup=g;selectedDay='Понедельник';renderGroupChips();renderDays();renderLessons();}
+function selectDay(day){selectedDay=day;renderDays();renderLessons();}
+
+// TEACHER
+function showTeacherScreen(){showScreen('teacher');renderTeacherScreen();}
+function renderTeacherScreen(){
+  if(!currentUser)return;
+  document.getElementById('teacher-badge-wrap').innerHTML=`<div class="user-badge"><div><div class="user-badge-name">${esc(currentUser.name)}</div><div class="user-badge-role">Преподаватель</div></div></div>`;
+  const teacherName=currentUser.name.toUpperCase().trim();
+  const firstWord=teacherName.split(' ')[0];
+  let html='',total=0;
+  DAYS.forEach(day=>{
+    let dayLessons=[];
+    Object.entries(scheduleData).forEach(([group,groupDays])=>{
+      (groupDays[day]||[]).forEach((lesson,idx)=>{
+        const t=(lesson.teacher||'').toUpperCase();
+        if(t.includes(firstWord)||firstWord.includes(t.split(' ')[0]))dayLessons.push({...lesson,group,idx});
+      });
+    });
+    if(!dayLessons.length)return;
+    // Убираем дубли для преподавателя
+    const uniqueTeacher=dayLessons.filter((item,idx)=>{
+      if(idx===0)return true;
+      const prev=dayLessons[idx-1];
+      return!(item.subject===prev.subject&&item.group===prev.group&&item.room===prev.room);
+    });
+    total+=uniqueTeacher.length;
+    uniqueTeacher.sort((a,b)=>(a.lessonNumber||0)-(b.lessonNumber||0));
+    html+=`<div class="teacher-day-block"><div class="teacher-day-title">📅 ${day}</div>`;
+    uniqueTeacher.forEach(item=>{
+      const safeKey=`t_${day}_${item.group}_${item.idx}`.replace(/[.#$[\]]/g,'_');
+      const tCardClass=item.highlight?' highlight':item.remote?' remote':item.remoteGreen?' remote-green':item.remoteOrange?' remote-orange':'';
+      const tPrefix=item.highlight?'⚠️ ':item.remote?'🏠 ':item.remoteGreen?'💻 ':item.remoteOrange?'🔗 ':'';
+      const tBadge=item.remote?`<div class="remote-badge yellow">🏠 ДО</div>`:item.remoteGreen?`<div class="remote-badge green">💻 Дистант</div>`:item.remoteOrange?`<div class="remote-badge orange">🔗 Онлайн</div>`:'';
+      const numStyle=item.remote?'background:#F9A825;color:#fff':item.remoteGreen?'background:#7AB648;color:#fff':item.remoteOrange?'background:#E6AC00;color:#fff':item.highlight?'background:var(--r);color:#fff':'';
+      const cardStyle=item.remote?'background:#FFFDE7;border-color:#F9A825':item.remoteGreen?'background:#F1FAEB;border-color:#7AB648':item.remoteOrange?'background:#FFF8E1;border-color:#E6AC00':'';
+      html+=`<div class="teacher-lesson${tCardClass}" style="${cardStyle}">
+        <div class="lesson-num" style="${numStyle}">${item.lessonNumber>0?item.lessonNumber:'—'}</div>
+        <div class="lesson-info"><div class="lesson-subject">${tPrefix}${esc(item.subject)}</div><div class="lesson-teacher">${esc(item.room)}</div>${tBadge}</div>
+        <div class="teacher-group-badge">${esc(item.group)}</div>
+        <button class="note-btn" id="tnotebtn_${safeKey}" onclick="openNote('t_${day}_${item.group}_${item.idx}','${esc(item.subject)} (${esc(item.group)})',${item.idx})" title="Заметка">📝</button>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  if(!total)html='<div class="empty-state"><div class="emoji">🔍</div><p>Пары не найдены.<br>Убедитесь что имя совпадает с именем в расписании</p></div>';
+  document.getElementById('teacher-schedule').innerHTML=html;
+  if(currentUser){
+    DAYS.forEach(day=>{
+      Object.entries(scheduleData).forEach(([group,groupDays])=>{
+        (groupDays[day]||[]).forEach((lesson,idx)=>{
+          const t=(lesson.teacher||'').toUpperCase();
+          if(t.includes(firstWord)||firstWord.includes(t.split(' ')[0])){
+            const safeKey=`t_${day}_${group}_${idx}`.replace(/[.#$[\]]/g,'_');
+            db.ref(`notes/${currentUser.username}/${safeKey}`).get().then(snap=>{
+              const btn=document.getElementById('tnotebtn_'+safeKey);
+              if(btn&&snap.exists()&&snap.val())btn.classList.add('has-note');
+            });
+          }
+        });
+      });
+    });
+  }
+}
+
+// NOTES
+function openNote(noteKey,subject){
+  if(!currentUser)return;
+  noteCurrentKey=noteKey;
+  noteCurrentSafeKey=noteKey.replace(/[.#$[\]]/g,'_');
+  document.getElementById('note-modal-title').textContent='📝 Заметка';
+  document.getElementById('note-modal-sub').textContent=subject;
+  document.getElementById('note-textarea').value='';
+  document.getElementById('note-delete-btn').style.display='none';
+  db.ref(`notes/${currentUser.username}/${noteCurrentSafeKey}`).get().then(snap=>{
+    if(snap.exists()&&snap.val()){document.getElementById('note-textarea').value=snap.val();document.getElementById('note-delete-btn').style.display='block';}
+  });
+  document.getElementById('note-modal').classList.add('open');
+}
+function closeNoteModal(){document.getElementById('note-modal').classList.remove('open');noteCurrentKey=null;noteCurrentSafeKey=null;}
+async function saveNote(){
+  if(!currentUser||!noteCurrentSafeKey)return;
+  const text=document.getElementById('note-textarea').value.trim();
+  await db.ref(`notes/${currentUser.username}/${noteCurrentSafeKey}`).set(text||null);
+  closeNoteModal();
+  if(currentMode==='student')renderLessons();
+  if(currentMode==='teacher')renderTeacherScreen();
+}
+async function deleteNote(){
+  if(!currentUser||!noteCurrentSafeKey)return;
+  await db.ref(`notes/${currentUser.username}/${noteCurrentSafeKey}`).remove();
+  closeNoteModal();
+  if(currentMode==='student')renderLessons();
+  if(currentMode==='teacher')renderTeacherScreen();
+}
+document.getElementById('note-modal').addEventListener('click',function(e){if(e.target===this)closeNoteModal();});
+
+// EXPORT
+function doExport(){
+  if(!selectedGroup||!scheduleData[selectedGroup])return;
+  const wb=XLSX.utils.book_new();
+  const rows=[['День','Пара','Предмет','Преподаватель','Кабинет']];
+  DAYS.forEach(day=>(scheduleData[selectedGroup][day]||[]).forEach(c=>rows.push([day,c.lessonNumber||'',c.subject||'',c.teacher||'',c.room||''])));
+  const ws=XLSX.utils.aoa_to_sheet(rows);
+  XLSX.utils.book_append_sheet(wb,ws,selectedGroup);
+  XLSX.writeFile(wb,`${selectedGroup}_расписание.xlsx`);
+}
+
+// ADMIN
+function openAdminPanel() {
+  document.getElementById('admin-modal').classList.add('open');
+  document.getElementById('admin-pw-step').style.display='block';
+  document.getElementById('admin-main-step').style.display='none';
+  document.getElementById('admin-teacher-step').style.display='none';
+  document.getElementById('admin-pw-input').value='';
+  document.getElementById('admin-pw-error').style.display='none';
+}
+function closeAdminPanel() {
+  document.getElementById('admin-modal').classList.remove('open');
+}
+async function adminCheckPw() {
+  const pw=document.getElementById('admin-pw-input').value;
   if(!pw) return;
-  const hash = await hashPassword(pw);
-  if(hash !== ADMIN_HASH){
-    document.getElementById('admin-pw-error').style.display = 'block';
+  const hash=await hashPassword(pw);
+  if(hash!==ADMIN_HASH){
+    document.getElementById('admin-pw-error').style.display='block';
     return;
   }
-  adminVerified = true; 
-  document.getElementById('admin-pw-step').style.display = 'none';
-  document.getElementById('admin-main-step').style.display = 'block';
+  document.getElementById('admin-pw-step').style.display='none';
+  document.getElementById('admin-main-step').style.display='block';
 }
-
-// ЗАЩИЩЕННЫЕ АДМИН-ФУНКЦИИ (АНТИ-F12 ВЗЛОМ)
-function adminGoUpload(){
-  if(!adminVerified){ alert('Доступ запрещен!'); return; }
-  document.getElementById('admin-file-input').click();
+function adminGoUpload() {
+  const old=document.getElementById('admin-file-input');
+  const fresh=old.cloneNode(true);
+  old.parentNode.replaceChild(fresh,old);
+  fresh.addEventListener('change', async ev=>{
+    const file=ev.target.files[0]; if(!file) return;
+    closeAdminPanel();
+    showLoading('Обрабатываем файл...');
+    try {
+      const result=await parseScheduleFile(file);
+      if(!Object.keys(result.schedule).length){hideLoading();return alert('Данные не найдены');}
+      if(result.debugColors?.length)console.log('🎨 Цвета в файле:',result.debugColors);
+      await db.ref('schedule').set({schedule:result.schedule,cats:result.categories});
+      hideLoading(); alert('✅ Расписание обновлено!');
+    } catch(err){hideLoading();alert('Ошибка: '+err.message);}
+  });
+  fresh.click();
 }
-
-function adminHandleFile(e){
-  if(!adminVerified){ alert('Доступ запрещен!'); return; }
-  const file = e.target.files[0];
-  if(!file) return;
-  showLoading('Читаем файл Excel...');
-  const reader = new FileReader();
-  reader.onload = function(evt){
-    try{
-      const data = new Uint8Array(evt.target.result);
-      const workbook = XLSX.read(data, {type:'array'});
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(sheet, {header:1});
-      parseExcel(rows);
-    }catch(err){hideLoading();alert('Ошибка парсинга: '+err.message);}
-  };
-  reader.readAsArrayBuffer(file);
+function adminGoCreateTeacher() {
+  document.getElementById('admin-main-step').style.display='none';
+  document.getElementById('admin-teacher-step').style.display='block';
+  document.getElementById('admin-t-name').value='';
+  document.getElementById('admin-t-login').value='';
+  document.getElementById('admin-t-pw').value='';
+  document.getElementById('admin-t-error').style.display='none';
 }
-
-function parseExcel(rows){
-  if(!adminVerified){ alert('Доступ запрещен!'); return; }
-  let groupsData = {};
-  let teachersData = {};
-  let foundTeachers = new Set();
-  let currentDay = '';
-  
-  for(let i=0; i<rows.length; i++){
-    const row = rows[i];
-    if(!row || !row.length) continue;
-    const firstCell = String(row[0]).trim().toUpperCase();
-    if(['ПОНЕДЕЛЬНИК','ВТОРНИК','СРЕДА','ЧЕТВЕРГ','ПЯТНИЦА','СУББОТА'].includes(firstCell)){
-      currentDay = firstCell;
-      continue;
-    }
-    if(!currentDay) continue;
-    if(row.length < 5) continue;
-    
-    const group = String(row[0]).trim();
-    const lessonNum = parseInt(row[1]);
-    const lessonName = String(row[2]).trim();
-    const teacherName = String(row[3]).trim();
-    const room = String(row[4]).trim();
-    
-    if(!group || isNaN(lessonNum) || !lessonName || !teacherName) continue;
-    foundTeachers.add(teacherName);
-    
-    if(!groupsData[group]) groupsData[group] = {};
-    if(!groupsData[group][currentDay]) groupsData[group][currentDay] = {};
-    groupsData[group][currentDay][lessonNum] = {name:lessonName, teacher:teacherName, room};
-    
-    if(!teachersData[teacherName]) teachersData[teacherName] = {};
-    if(!teachersData[teacherName][currentDay]) teachersData[teacherName][currentDay] = {};
-    teachersData[teacherName][currentDay][lessonNum] = {name:lessonName, group:group, room};
+async function adminCreateTeacher() {
+  const name=document.getElementById('admin-t-name').value.trim();
+  const username=document.getElementById('admin-t-login').value.trim().toLowerCase();
+  const pw=document.getElementById('admin-t-pw').value;
+  const errEl=document.getElementById('admin-t-error');
+  if(!name||!username||!pw){errEl.textContent='Заполните все поля';errEl.style.display='block';return;}
+  if(!/^[a-z0-9_]+$/.test(username)){errEl.textContent='Логин: только латиница, цифры, _';errEl.style.display='block';return;}
+  const snap=await db.ref('users/'+username).get();
+  if(snap.exists()){errEl.textContent='Логин уже занят!';errEl.style.display='block';return;}
+  const teacherHash=await hashPassword(pw);
+  await db.ref('users/'+username).set({name:name,passwordHash:teacherHash,role:'teacher',group:''});
+  closeAdminPanel();
+  alert(`✅ Аккаунт создан!\nЛогин: ${username}\nПароль: ${pw}`);
+}
+window.addEventListener('keydown', e => {
+  if (e.altKey && (e.key==='p'||e.key==='P'||e.code==='KeyP')) {
+    e.preventDefault();
+    openAdminPanel();
   }
-  
-  uploadScheduleToFirebase(groupsData, teachersData, Array.from(foundTeachers));
+});
+// Долгое нажатие на логотип — открыть админ панель (для телефона)
+let logoTimer=null;
+document.addEventListener('DOMContentLoaded',()=>{
+  const logoEl=document.querySelector('.welcome-icon');
+  if(!logoEl)return;
+  logoEl.addEventListener('touchstart',()=>{logoTimer=setTimeout(()=>openAdminPanel(),1500);},{passive:true});
+  logoEl.addEventListener('touchend',()=>{clearTimeout(logoTimer);},{passive:true});
+  logoEl.addEventListener('touchmove',()=>{clearTimeout(logoTimer);},{passive:true});
+  logoEl.addEventListener('dblclick',()=>openAdminPanel());
+});
+
+// PARSER — исправлен DAY_MAP (добавлены вторн, пнд, пятн, субб)
+const DAY_MAP={
+  'пон':'Понедельник','пн':'Понедельник','пнд':'Понедельник','понед':'Понедельник','понедельник':'Понедельник',
+  'вт':'Вторник','втр':'Вторник','вторн':'Вторник','вторник':'Вторник','вторн.':'Вторник',
+  'ср':'Среда','срд':'Среда','среда':'Среда','ср.':'Среда',
+  'чт':'Четверг','чтв':'Четверг','четв':'Четверг','четверг':'Четверг','чт.':'Четверг',
+  'пт':'Пятница','птн':'Пятница','пятн':'Пятница','пятница':'Пятница','пт.':'Пятница','пятн.':'Пятница',
+  'сб':'Суббота','суб':'Суббота','субб':'Суббота','суббота':'Суббота','сб.':'Суббота'
+};
+function normalizeDay(raw){
+  if(!raw)return'';
+  const s=raw.trim().toLowerCase().replace(/[\s.]+$/,'').replace(/\s+/g,' ');
+  return DAY_MAP[s]||'';
+}
+function isDayName(t){return!!normalizeDay(t)&&!/^\d+$/.test(t);}
+function isGroupHeader(t){return t&&t.length>=3&&/^[А-ЯA-Z]+\d+/.test(t.trim());}
+
+function findOffset(rows,hIdx,colIdx){
+  for(let i=hIdx+1;i<Math.min(hIdx+20,rows.length);i++){
+    const row=rows[i];const sub=row[colIdx]?.value?.trim();if(!sub)continue;
+    for(let o=1;o<=5;o++){const c=row[colIdx+o]?.value?.trim();if(c&&!isDayName(c)&&!isGroupHeader(c))return o;}
+  }return 1;
 }
 
-async function uploadScheduleToFirebase(groups, teachers, teacherList){
-  if(!adminVerified){ alert('Доступ запрещен!'); return; }
-  showLoading('Загружаем в Firebase...');
-  try{
-    await db.ref('schedule/groups').set(groups);
-    await db.ref('schedule/teachers').set(teachers);
-    await loadGroupsList();
-    
-    bulkTeacherList = [];
-    document.getElementById('admin-bulk-box').style.display = 'none';
-    
-    const usersSnap = await db.ref('users_secure').get();
-    const registeredTeachers = new Set();
-    if(usersSnap.exists()){
-      Object.values(usersSnap.val()).forEach(u => {
-        if(u.role === 'teacher') registeredTeachers.add(u.name);
-      });
+function parseTable(rows){
+  const schedule={},debugColors=new Set();if(rows.length<2)return{schedule,debugColors};
+  // Find header row with group names
+  let hIdx=0;
+  for(let i=0;i<rows.length;i++){if(rows[i]?.some(c=>isGroupHeader(c.value))){hIdx=i;break;}}
+  const groups=[];
+  rows[hIdx].forEach((cell,idx)=>{if(isGroupHeader(cell.value))groups.push({name:cell.value,col:idx,offset:findOffset(rows,hIdx,idx)});});
+  if(!groups.length)return{schedule,debugColors};
+  const firstCol=groups[0].col;
+  // Search for day names in columns 0..firstCol (wider scan)
+  const scanCols=Math.max(firstCol,4);
+  let currentDay='';
+  // Track last seen lesson number to avoid false positives
+  for(let i=hIdx+1;i<rows.length;i++){
+    const row=rows[i];if(!row?.length)continue;
+    // Scan ALL columns up to firstGroupCol for a day name
+    for(let c=0;c<=scanCols&&c<row.length;c++){
+      const v=(row[c]?.value||'').trim();
+      if(v&&isDayName(v)){
+        const d=normalizeDay(v);
+        if(d){currentDay=d;break;}
+      }
     }
-    
-    teacherList.forEach(t => {
-      if(!registeredTeachers.has(t)) bulkTeacherList.push(t);
-    });
-    
-    hideLoading();
-    document.getElementById('admin-file-input').value = '';
-    
-    if(bulkTeacherList.length > 0){
-      document.getElementById('admin-bulk-txt').innerText = `Найдено новых преподавателей из расписания: ${bulkTeacherList.length}`;
-      document.getElementById('admin-bulk-box').style.display = 'block';
-      alert('Расписание успешно загружено! Обнаружены новые преподаватели, вы можете зарегистрировать их автоматически ниже.');
-    } else {
-      closeAdminPanel();
-      alert('Расписание успешно загружено! Все преподаватели уже зарегистрированы.');
+    if(!currentDay)continue;
+    // Find lesson number — look in all pre-group columns
+    let ln=0;
+    for(let c=0;c<=scanCols&&c<row.length;c++){
+      const v=(row[c]?.value||'').trim();
+      if(v&&/^\d+$/.test(v)){const n=parseInt(v);if(n>=1&&n<=14){ln=n;break;}}
     }
-  }catch(e){hideLoading();alert('Ошибка сохранения базы: '+e.message);}
+    const nextRow=rows[i+1],nextNext=rows[i+2];
+    const nextLN=(()=>{if(!nextRow)return false;for(let c=0;c<=scanCols&&c<nextRow.length;c++){const v=(nextRow[c]?.value||'').trim();if(v&&/^\d+$/.test(v)&&parseInt(v)>=1&&parseInt(v)<=14)return true;}return false;})();
+    for(const{name:grp,col,offset}of groups){
+      const sub=(row[col]?.value||'').trim();if(!sub||isGroupHeader(sub)||isDayName(sub))continue;
+      const t1=(row[col+offset]?.value||'').trim();let teacher=t1,room='—';
+      if(nextRow){
+        const nv=(nextRow[col+offset]?.value||'').trim(),ns=(nextRow[col]?.value||'').trim();
+        const empty=!ns||isGroupHeader(ns)||isDayName(ns);
+        const initials=/^[А-ЯA-ZЁ]\.[А-ЯA-ZЁ]\.?$/.test(nv);
+        if(empty&&initials&&!nextLN){teacher=t1+' '+nv;const rc=(nextNext?.[col+offset]?.value||'').trim();if(rc&&!isGroupHeader(rc)&&!isDayName(rc))room=rc;}
+        else if(empty&&nv&&!nextLN&&nv.length<=20)room=nv;
+      }
+      // Normalize: strip leading FF alpha prefix → 6-char hex
+      const rawFc=(row[col].fillColor||'');
+      const fc=rawFc.toUpperCase().replace(/^FF([0-9A-F]{6})$/,'$1');
+      debugColors.add(fc&&fc.length>=6?rawFc.toUpperCase():'');
+      const colorMatch=(target,hex)=>{
+        if(!hex||hex.length<6)return false;
+        const h=hex.slice(0,6);
+        const tr=parseInt(target.slice(0,2),16),tg=parseInt(target.slice(2,4),16),tb=parseInt(target.slice(4,6),16);
+        const hr=parseInt(h.slice(0,2),16),hg=parseInt(h.slice(2,4),16),hb=parseInt(h.slice(4,6),16);
+        return Math.abs(tr-hr)+Math.abs(tg-hg)+Math.abs(tb-hb)<25;
+      };
+      const isRed=colorMatch('FF0000',fc);
+      const isYellowCell=colorMatch('FFFF00',fc);   // FFFFFF00 → FFFF00
+      const isGreen=colorMatch('008000',fc);         // FF008000 → 008000
+      const isOrange=colorMatch('FFCC00',fc);        // FFFFCC00 → FFCC00
+      if(!schedule[grp])schedule[grp]={};
+      if(!schedule[grp][currentDay])schedule[grp][currentDay]=[];
+      schedule[grp][currentDay].push({subject:sub,teacher:teacher||'—',room:room||'—',highlight:isRed,remote:isYellowCell,remoteGreen:isGreen,remoteOrange:isOrange,lessonNumber:ln});
+    }
+  }
+  return{schedule,debugColors};
 }
 
-// ДОБАВЛЕНИЕ ПРЕПОДАВАТЕЛЯ ВРУЧНУЮ (ЗАЩИЩЕНО)
-async function adminCreateTeacher(){
-  if(!adminVerified){ alert('Доступ запрещен!'); return; }
-  const name = document.getElementById('adm-t-name').value.trim();
-  const login = document.getElementById('adm-t-user').value.trim().toLowerCase();
-  const pw = document.getElementById('adm-t-pw').value;
-  if(!name || !login || !pw) return alert('Заполните все поля');
-  showLoading('Создаём...');
-  try{
-    const hash = await hashPassword(pw);
-    const userToken = login + '_' + hash; 
-    
-    const snap = await db.ref('users_secure/' + userToken).get();
-    if(snap.exists()){hideLoading(); return alert('Такой аккаунт преподавателя уже есть!');}
-    
-    await db.ref('users_secure/' + userToken).set({name, role:'teacher', group:'', loginName:login});
-    hideLoading();
-    document.getElementById('adm-t-name').value = '';
-    document.getElementById('adm-t-user').value = '';
-    document.getElementById('adm-t-pw').value = '';
-    alert('Преподаватель успешно добавлен!');
-  }catch(e){hideLoading();alert('Ошибка: '+e.message);}
+function parseScheduleFile(file){
+  return new Promise((res,rej)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      try{
+        const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array',cellStyles:true,cellDates:true});
+        const allSchedule={},allCats={},allDebugColors=new Set();
+        wb.SheetNames.forEach(sn=>{
+          const ws=wb.Sheets[sn];if(!ws?.['!ref'])return;
+          const range=XLSX.utils.decode_range(ws['!ref']),rows=[];
+          for(let R=range.s.r;R<=range.e.r;R++){
+            const row=[];
+            for(let C=range.s.c;C<=range.e.c;C++){
+              const cell=ws[XLSX.utils.encode_cell({r:R,c:C})];let value='',fillColor='';
+              if(cell){
+                if(cell.v!==undefined&&typeof cell.v==='number')value=String(cell.v);
+                else if(cell.v!==undefined)value=String(cell.v);
+                else if(cell.w!==undefined)value=String(cell.w);
+                // Try all possible color locations
+                if(cell.s?.fgColor?.rgb)fillColor=cell.s.fgColor.rgb;
+                else if(cell.s?.bgColor?.rgb)fillColor=cell.s.bgColor.rgb;
+                else if(cell.s?.patternColor?.rgb)fillColor=cell.s.patternColor.rgb;
+              }row.push({value,fillColor});
+            }rows.push(row);
+          }
+          const {schedule:tSched,debugColors}=parseTable(rows);
+          debugColors.forEach(c=>{if(c)allDebugColors.add(c);});
+          const names=Object.keys(tSched);
+          if(names.length){
+            allCats[sn]=names;
+            for(const[grp,days]of Object.entries(tSched)){
+              if(!allSchedule[grp]){allSchedule[grp]=days;continue;}
+              for(const[day,cls]of Object.entries(days))if(!allSchedule[grp][day]&&cls.length)allSchedule[grp][day]=cls;
+            }
+          }
+        });
+        res({schedule:allSchedule,categories:allCats,debugColors:[...allDebugColors].filter(Boolean)});
+      }catch(err){rej(err);}
+    };
+    reader.onerror=()=>rej(new Error('Ошибка чтения файла'));
+    reader.readAsArrayBuffer(file);
+  });
 }
 
-function makeLogin(name, idx){
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+// Collect all unique teachers from loaded schedule
+let bulkTeacherList=[];
+function adminGoBulkTeachers(){
+  document.getElementById('admin-main-step').style.display='none';
+  document.getElementById('admin-bulk-step').style.display='block';
+  const teacherSet=new Set();
+  Object.values(scheduleData).forEach(days=>Object.values(days).forEach(lessons=>lessons.forEach(l=>{if(l.teacher&&l.teacher!=='—')teacherSet.add(l.teacher.trim());})));
+  bulkTeacherList=[...teacherSet].sort();
+  const listEl=document.getElementById('admin-bulk-list');
+  if(!bulkTeacherList.length){listEl.innerHTML='<div style="color:var(--tm);padding:12px;text-align:center">Сначала загрузите расписание</div>';return;}
+  listEl.innerHTML=bulkTeacherList.map((name,i)=>{
+    const login=makeLogin(name,i);
+    return `<div style="display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid var(--brd)">
+      <div style="flex:1;font-size:13px;font-weight:600;color:var(--t)">${esc(name)}</div>
+      <div style="font-size:11px;color:var(--tm);background:var(--rl);padding:3px 8px;border-radius:6px">${esc(login)}</div>
+    </div>`;
+  }).join('');
+}
+function makeLogin(name,idx){
+  // Транслит фамилии + индекс для уникальности
   const tr={'А':'a','Б':'b','В':'v','Г':'g','Д':'d','Е':'e','Ё':'yo','Ж':'zh','З':'z','И':'i','Й':'y','К':'k','Л':'l','М':'m','Н':'n','О':'o','П':'p','Р':'r','С':'s','Т':'t','У':'u','Ф':'f','Х':'h','Ц':'ts','Ч':'ch','Ш':'sh','Щ':'sch','Ъ':'','Ы':'y','Ь':'','Э':'e','Ю':'yu','Я':'ya'};
-  const surname = name.split(/[\s.,]/)[0].toUpperCase();
-  let login = surname.split('').map(c => tr[c] || c.toLowerCase()).join('').replace(/[^a-z0-9]/g,'');
-  if(!login) login = 'teacher';
-  return login + (idx + 1);
+  const surname=name.split(/[\s.,]/)[0].toUpperCase();
+  let login=surname.split('').map(c=>tr[c]||c.toLowerCase()).join('').replace(/[^a-z0-9]/g,'');
+  if(!login)login='teacher';
+  return login+(idx+1);
 }
-
-// АДАПТИРОВАННОЕ МАССОВОЕ СОЗДАНИЕ ПРЕПОДАВАТЕЛЕЙ
 async function adminBulkCreate(){
-  if(!adminVerified){ alert('Доступ запрещен!'); return; }
-  if(!bulkTeacherList.length) return;
+  if(!bulkTeacherList.length)return;
   showLoading('Создаём аккаунты...');
-  const DEFAULT_PW = 'teacher123';
-  const hash = await hashPassword(DEFAULT_PW);
-  let created = 0, skipped = 0;
-  
-  for(let i=0; i<bulkTeacherList.length; i++){
-    const name = bulkTeacherList[i];
-    const login = makeLogin(name, i);
-    const userToken = login + '_' + hash; 
-    
-    const snap = await db.ref('users_secure/' + userToken).get();
-    if(snap.exists()){ skipped++; continue; }
-    
-    await db.ref('users_secure/' + userToken).set({name, role:'teacher', group:'', loginName:login});
+  const DEFAULT_PW='teacher123';
+  const hash=await hashPassword(DEFAULT_PW);
+  let created=0,skipped=0;
+  for(let i=0;i<bulkTeacherList.length;i++){
+    const name=bulkTeacherList[i];
+    const login=makeLogin(name,i);
+    const snap=await db.ref('users/'+login).get();
+    if(snap.exists()){skipped++;continue;}
+    await db.ref('users/'+login).set({name,passwordHash:hash,role:'teacher',group:''});
     created++;
   }
   hideLoading();
   closeAdminPanel();
-  alert(`✅ Готово!\nСоздано: ${created}\nПропущено: ${skipped}\n\nПароль для всех: teacher123`);
+  alert(`✅ Готово!\nСоздано: ${created}\nПропущено (уже есть): ${skipped}\n\nПароль для всех: teacher123\nЛогин = транслит фамилии + номер`);
 }
-
-// АВТОМАТИЧЕСКИЙ ВХОД ИЗ СЕССИИ ПРИ ЗАПУСКЕ СТРАНИЦЫ
-window.onload = async function(){
-  await loadGroupsList();
-  const saved = sessionStorage.getItem('user');
-  if(saved){
-    try{
-      currentUser = JSON.parse(saved);
-      currentMode = currentUser.role;
-      if(currentUser.role === 'teacher') showTeacherScreen();
-      else showStudentScreen();
-    }catch(e){sessionStorage.removeItem('user');}
-  }
-  
-  document.addEventListener('click', (e) => {
-    if(!e.target.closest('.search-box')){
-      document.getElementById('reg-group-suggest').style.display='none';
-      document.getElementById('st-suggest').style.display='none';
-    }
-  });
-};
+function showLoading(text){document.getElementById('loading-text').textContent=text||'Загрузка...';document.getElementById('loading').classList.add('open');}
+function hideLoading(){document.getElementById('loading').classList.remove('open');}
 </script>
 </body>
 </html>
-  }
-}
