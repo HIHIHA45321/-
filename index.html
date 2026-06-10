@@ -596,61 +596,87 @@ function renderTeacherScreen(){
   const teacherName=currentUser.name.toUpperCase().trim();
   const firstWord=teacherName.split(' ')[0];
   let html='',total=0;
+  
   DAYS.forEach(day=>{
     let dayLessons=[];
     Object.entries(scheduleData).forEach(([group,groupDays])=>{
       (groupDays[day]||[]).forEach((lesson,idx)=>{
         const t=(lesson.teacher||'').toUpperCase();
-        if(t.includes(firstWord)||firstWord.includes(t.split(' ')[0]))dayLessons.push({...lesson,group,idx});
+        if(t.includes(firstWord)||firstWord.includes(t.split(' ')[0])) {
+          dayLessons.push({...lesson,group,idx});
+        }
       });
     });
     if(!dayLessons.length)return;
-    // Убираем дубли для преподавателя
-    const uniqueTeacher=dayLessons.filter((item,idx)=>{
-      if(idx===0)return true;
-      const prev=dayLessons[idx-1];
-      return!(item.subject===prev.subject&&item.group===prev.group&&item.room===prev.room);
-    });
-    total+=uniqueTeacher.length;
-    uniqueTeacher.sort((a,b)=>(a.lessonNumber||0)-(b.lessonNumber||0));
-    html+=`<div class="teacher-day-block"><div class="teacher-day-title">📅 ${day}</div>`;
-    uniqueTeacher.forEach(item=>{
+    
+    // Сортируем пары по возрастанию номера
+    dayLessons.sort((a,b)=>(a.lessonNumber||0)-(b.lessonNumber||0));
+    
+    let tempHtml = '';
+    let dayCount = 0;
+    let skipCounter = 0;
+
+    dayLessons.forEach((item, idx) => {
+      if (skipCounter > 0) {
+        skipCounter--;
+        return; 
+      }
+
+      let lessonTimeVisual = item.lessonNumber > 0 ? item.lessonNumber : '—';
+      
+      if (item.lessonNumber > 0) {
+        let lastNum = item.lessonNumber;
+        let nextIdx = idx + 1;
+        
+        // Проверяем следующие строки: если группа, предмет и кабинет совпадают, объединяем в диапазон
+        while (dayLessons[nextIdx] && 
+               dayLessons[nextIdx].subject === item.subject && 
+               dayLessons[nextIdx].room === item.room &&
+               dayLessons[nextIdx].group === item.group) {
+          if (dayLessons[nextIdx].lessonNumber > 0) {
+            lastNum = dayLessons[nextIdx].lessonNumber;
+          }
+          nextIdx++;
+          skipCounter++; // Пропускаем эти дубликаты на следующих итерациях
+        }
+        
+        if (lastNum !== item.lessonNumber) {
+          lessonTimeVisual = `${item.lessonNumber}-${lastNum}`;
+        }
+      }
+
+      dayCount++;
+      total++;
+
       const safeKey=`t_${day}_${item.group}_${item.idx}`.replace(/[.#$[\]]/g,'_');
       const tCardClass=item.highlight?' highlight':item.remote?' remote':item.remoteGreen?' remote-green':item.remoteOrange?' remote-orange':'';
       const tPrefix=item.highlight?'⚠️ ':item.remote?'🏠 ':item.remoteGreen?'💻 ':item.remoteOrange?'🔗 ':'';
       const tBadge=item.remote?`<div class="remote-badge yellow">🏠 ДО</div>`:item.remoteGreen?`<div class="remote-badge green">💻 Дистант</div>`:item.remoteOrange?`<div class="remote-badge orange">🔗 Онлайн</div>`:'';
       const numStyle=item.remote?'background:#F9A825;color:#fff':item.remoteGreen?'background:#7AB648;color:#fff':item.remoteOrange?'background:#E6AC00;color:#fff':item.highlight?'background:var(--r);color:#fff':'';
       const cardStyle=item.remote?'background:#FFFDE7;border-color:#F9A825':item.remoteGreen?'background:#F1FAEB;border-color:#7AB648':item.remoteOrange?'background:#FFF8E1;border-color:#E6AC00':'';
-let lessonTimeVisual = item.lessonNumber > 0 ? item.lessonNumber : '—';
-if (item.lessonNumber > 0 && item.idx !== undefined) {
-  const originalDayLessons = scheduleData[item.group]?.[day] || [];
-  let lastNum = item.lessonNumber;
-  let nextIdx = item.idx + 1;
-  while (originalDayLessons[nextIdx] && 
-         originalDayLessons[nextIdx].subject === item.subject && 
-         originalDayLessons[nextIdx].room === item.room) {
-    if (originalDayLessons[nextIdx].lessonNumber > 0) {
-      lastNum = originalDayLessons[nextIdx].lessonNumber;
-    }
-    nextIdx++;
-  }
-  if (lastNum !== item.lessonNumber) {
-    lessonTimeVisual = `${item.lessonNumber}-${lastNum}`;
-  }
-}
-
-html+=`<div class="teacher-lesson${tCardClass}" style="${cardStyle}">
-  <div class="lesson-num" style="${numStyle}; width: auto; padding: 0 8px; min-width: 36px;">${lessonTimeVisual}</div>
-  <div class="lesson-info"><div class="lesson-subject">${tPrefix}${esc(item.subject)}</div><div class="lesson-teacher">${esc(item.room)}</div>${tBadge}</div>
-        <div class="lesson-info"><div class="lesson-subject">${tPrefix}${esc(item.subject)}</div><div class="lesson-teacher">${esc(item.room)}</div>${tBadge}</div>
-        <div class="teacher-group-badge">${esc(item.group)}</div>
+      
+      tempHtml += `<div class="teacher-lesson${tCardClass}" style="${cardStyle}">
+        <div class="lesson-num" style="${numStyle}; width: auto; padding: 0 8px; min-width: 36px; text-align: center;">${lessonTimeVisual}</div>
+        <div class="lesson-info">
+          <div class="lesson-subject">${tPrefix}${esc(item.subject)}</div>
+          <div class="lesson-teacher">${esc(item.room)}</div>
+          ${tBadge}
+        </div>
+        <div style="margin-left:auto; font-size:14px; font-weight:700; color:var(--r); background:var(--rl); padding:6px 10px; border-radius:8px; flex-shrink:0;">
+          ${esc(item.group)}
+        </div>
         <button class="note-btn" id="tnotebtn_${safeKey}" onclick="openNote('t_${day}_${item.group}_${item.idx}','${esc(item.subject)} (${esc(item.group)})',${item.idx})" title="Заметка">📝</button>
       </div>`;
     });
-    html+='</div>';
+
+    if (dayCount > 0) {
+      html += `<div class="teacher-day-block"><div class="teacher-day-title">📅 ${day}</div>${tempHtml}</div>`;
+    }
   });
+  
   if(!total)html='<div class="empty-state"><div class="emoji">🔍</div><p>Пары не найдены.<br>Убедитесь что имя совпадает с именем в расписании</p></div>';
   document.getElementById('teacher-schedule').innerHTML=html;
+  
   if(currentUser){
     DAYS.forEach(day=>{
       Object.entries(scheduleData).forEach(([group,groupDays])=>{
